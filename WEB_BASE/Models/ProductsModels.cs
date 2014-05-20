@@ -31,14 +31,14 @@ namespace WEB_BASE.Models
         public string CreatedBy { get; set; }
 
         [Display(Name = "Data da Criação")]
-        public DateTime CreationDate { get; set; }
+        public DateTime ? CreationDate { get; set; }
 
         [StringLength(128)]
         [Display(Name = "Atualizado Por")]
         public string UpdatedBy { get; set; }
 
         [Display(Name = "Data da Atualização")]
-        public DateTime UpdatedDate { get; set; }
+        public DateTime ? UpdatedDate { get; set; }
 
         [ForeignKey("CategoryId")]
         public virtual ProductsCategoryModels Category { get; set; }

@@ -179,6 +179,10 @@
     <Compile Include="Migrations\201405200052039_UpdateProductsAndCategorys.Designer.cs">
       <DependentUpon>201405200052039_UpdateProductsAndCategorys.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201405202141586_TratamentoDateTime.cs" />
+    <Compile Include="Migrations\201405202141586_TratamentoDateTime.Designer.cs">
+      <DependentUpon>201405202141586_TratamentoDateTime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationFullContext.cs" />
@@ -274,6 +278,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201405200052039_UpdateProductsAndCategorys.resx">
       <DependentUpon>201405200052039_UpdateProductsAndCategorys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405202141586_TratamentoDateTime.resx">
+      <DependentUpon>201405202141586_TratamentoDateTime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -12,9 +12,8 @@
 <h2>@ViewBag.Title</h2>
 
 <div>
-    <h4>Modelo de Produtos</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl class="well dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Category.CategoryName)
         </dt>
@@ -69,6 +68,10 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Alterar Produto", "Edit", new { id = Model.ProductId }, new { @class = "btn btn-warning" })
-    @Html.ActionLink("Voltar para Lista", "Index", null, new { @class = "btn btn-default" })
+    <a href="@Url.Action("Edit", "Products", new { id = Model.ProductId })" class="btn btn-warning">
+        <span class="glyphicon glyphicon-edit"></span>&nbsp;Alterar Produto
+    </a>
+    <a href="@Url.Action("Index", "Products")" class="btn btn-default">
+        <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Voltar para Lista
+    </a>
 </p>

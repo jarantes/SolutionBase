@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Microsoft.Ajax.Utilities;
-using WEB_BASE.Models;
+﻿using WEB_BASE.Models;
 
 namespace WEB_BASE.Repository
 {

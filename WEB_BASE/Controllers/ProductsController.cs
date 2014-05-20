@@ -9,6 +9,7 @@ using WEB_BASE.Repository;
 
 namespace WEB_BASE.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly ApplicationFullContext _db = new ApplicationFullContext();
