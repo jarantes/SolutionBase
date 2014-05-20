@@ -39,13 +39,11 @@ namespace WEB_BASE.Controllers
         // GET: Products/Create
         public ActionResult Create()
         {
-            ViewBag.CategoryId = new SelectList(_unitOfWork.ProductsCategoryRepository.DbSet, "CategoryId", "CategoryName");//new SelectList(_db.Categorys, "CategoryId", "CategoryName");
+            ViewBag.CategoryId = new SelectList(_unitOfWork.ProductsCategoryRepository.DbSet, "CategoryId", "CategoryName");
             return View();
         }
 
         // POST: Products/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ProductId,ProductCode,ProductName,UnitPrice,CategoryId")] ProductsModels productsModels)
@@ -54,8 +52,10 @@ namespace WEB_BASE.Controllers
             {
                 productsModels.CreationDate = DateTime.Now;
                 productsModels.CreatedBy = User.Identity.GetUserId();
+
                 _unitOfWork.ProductsRepository.Insert(productsModels);
                 _unitOfWork.ProductsRepository.Commit();
+
                 return RedirectToAction("Index");
             }
 
@@ -75,13 +75,11 @@ namespace WEB_BASE.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryId = new SelectList(_unitOfWork.ProductsCategoryRepository.DbSet, "CategoryId", "CategoryName");//new SelectList(_db.Categorys, "CategoryId", "CategoryName");
+            ViewBag.CategoryId = new SelectList(_unitOfWork.ProductsCategoryRepository.DbSet, "CategoryId", "CategoryName");
             return View(productsModels);
         }
 
         // POST: Products/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ProductId,ProductCode,ProductName,UnitPrice,CategoryId,CreatedBy,CreationDate")] ProductsModels productsModels)
@@ -90,8 +88,11 @@ namespace WEB_BASE.Controllers
             {
                 productsModels.UpdatedDate = DateTime.Now;
                 productsModels.UpdatedBy = User.Identity.GetUserId();
-                _unitOfWork.ProductsRepository.Context.Entry(productsModels).State = EntityState.Modified;
+
+                //_unitOfWork.ProductsRepository.Context.Entry(productsModels).State = EntityState.Modified;
+                _unitOfWork.ProductsRepository.Update(productsModels);
                 _unitOfWork.ProductsRepository.Commit();
+
                 return RedirectToAction("Index");
             }
             ViewBag.CategoryId = new SelectList(_unitOfWork.ProductsCategoryRepository.DbSet, "CategoryId", "CategoryName");
@@ -119,8 +120,10 @@ namespace WEB_BASE.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             ProductsModels productsModels = _unitOfWork.ProductsRepository.GetById(id);
+
             _unitOfWork.ProductsRepository.Delete(productsModels);
             _unitOfWork.ProductsRepository.Commit();
+
             return RedirectToAction("Index");
         }
 
