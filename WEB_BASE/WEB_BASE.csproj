@@ -167,9 +167,28 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201405192325429_InicialDB.cs" />
+    <Compile Include="Migrations\201405192325429_InicialDB.Designer.cs">
+      <DependentUpon>201405192325429_InicialDB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201405200003221_UpdateUserId.cs" />
+    <Compile Include="Migrations\201405200003221_UpdateUserId.Designer.cs">
+      <DependentUpon>201405200003221_UpdateUserId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201405200052039_UpdateProductsAndCategorys.cs" />
+    <Compile Include="Migrations\201405200052039_UpdateProductsAndCategorys.Designer.cs">
+      <DependentUpon>201405200052039_UpdateProductsAndCategorys.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ApplicationFullContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ProductsCategoryModels.cs" />
+    <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Models\ProductsModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\GenericRepository.cs" />
+    <Compile Include="Repository\UnitOfWork.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +206,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\application.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
@@ -232,6 +252,11 @@
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Products\Create.cshtml" />
+    <Content Include="Views\Products\Delete.cshtml" />
+    <Content Include="Views\Products\Details.cshtml" />
+    <Content Include="Views\Products\Edit.cshtml" />
+    <Content Include="Views\Products\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -239,6 +264,17 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201405192325429_InicialDB.resx">
+      <DependentUpon>201405192325429_InicialDB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405200003221_UpdateUserId.resx">
+      <DependentUpon>201405200003221_UpdateUserId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405200052039_UpdateProductsAndCategorys.resx">
+      <DependentUpon>201405200052039_UpdateProductsAndCategorys.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

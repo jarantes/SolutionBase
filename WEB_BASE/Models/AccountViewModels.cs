@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WEB_BASE.Models
 {
@@ -57,6 +58,16 @@ namespace WEB_BASE.Models
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+        
+        [Required]
+        [StringLength(50, ErrorMessage = "O/A {0} deve ter no mínimo {2} caracteres.", MinimumLength = 10)]
+        [Display(Name = "Nome Completo")]
+        public string Name { get; set; }
+        
+        [Required]
+        [DataType(DataType.Date, ErrorMessage = "A data informada é inválida"), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Data de Aniversário")]
+        public DateTime BirthDate { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "O/A {0} deve ter no mínimo {2} caracteres.", MinimumLength = 6)]
