@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@model IEnumerable<ProductsModels>
+@{
+    var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+}
+
+<div id="listProducts">
+    <table class="table table-striped table-hover">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Category.CategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationDate)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    @{
+                        var user = manager.FindById(item.CreatedBy);
+                        @Html.DisplayFor(modelItem => user.Name)
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDate)
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "Products", new { id = item.ProductId })" class="btn btn-warning btn-xs">
+                        <span class="glyphicon glyphicon-edit"></span>&nbsp;Alterar
+                    </a>
+                    <a href="@Url.Action("Details", "Products", new { id = item.ProductId })" class="btn btn-info btn-xs">
+                        <span class="glyphicon glyphicon-th-list"></span>&nbsp;Detalhes
+                    </a>
+                    <a href="@Url.Action("Delete", "Products", new { id = item.ProductId })" class="btn btn-danger btn-xs">
+                        <span class="glyphicon glyphicon-remove"></span>&nbsp;Remover
+                    </a>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+

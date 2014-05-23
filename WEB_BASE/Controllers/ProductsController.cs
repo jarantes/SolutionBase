@@ -12,14 +12,35 @@ namespace WEB_BASE.Controllers
     [Authorize]
     public class ProductsController : Controller
     {
-        private readonly ApplicationFullContext _db = new ApplicationFullContext();
         private readonly UnitOfWork _unitOfWork = new UnitOfWork();
 
         // GET: Products
-        public ActionResult Index()
+        public ActionResult Index([Bind(Include = "ProductName")] string productName)
         {
-            var products = _unitOfWork.ProductsRepository.DbSet.Include(p => p.Category);   
+            var products = _unitOfWork.ProductsRepository.DbSet.Include(p => p.Category);
+            if (!String.IsNullOrEmpty(productName))
+            {
+                products = products.Where(a => a.ProductName.Contains(productName));
+            }
+            if (Request.IsAjaxRequest())
+            {
+                //System.Threading.Thread.Sleep(2000);
+                return PartialView("_ListProducts", products.ToList());
+            }
             return View(products.ToList());
+        }
+
+        public ActionResult AutoComplete(string term)
+        {
+            var produtcsName = _unitOfWork.ProductsRepository.DbSet
+                .Where(a => a.ProductName.StartsWith(term))
+                .Take(10)
+                .Select(a => new
+                {
+                    label = a.ProductName
+                });
+
+            return Json(produtcsName, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Products/Details/5
@@ -126,15 +147,6 @@ namespace WEB_BASE.Controllers
             _unitOfWork.ProductsRepository.Commit();
 
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

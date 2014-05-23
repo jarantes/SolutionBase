@@ -1,12 +1,9 @@
-﻿@using Microsoft.AspNet.Identity
-@using Microsoft.AspNet.Identity.EntityFramework
-@using WEB_BASE.Models
+﻿@using WEB_BASE.Models
 @model IEnumerable<ProductsModels>
 
 @{
     ViewBag.Title = "Lista de Produtos";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
 }
 
 <h2>@ViewBag.Title</h2>
@@ -16,68 +13,53 @@
         <span class="glyphicon glyphicon-plus"></span>&nbsp;Criar Novo
     </a>
 </p>
- 
-<table class="table table-striped table-hover">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Category.CategoryName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProductCode)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProductName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UnitPrice)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreationDate)
-        </th>
-        <th></th>
-    </tr>
+<hr />
+<form action="@Url.Action("Index","Products")" method="get"
+      data-otf-ajax="true" data-otf-target="#listProducts">
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.Label("Pesquisar por Nome", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="search" name="ProductName" class="form-control" data-otf-autocomplete="@Url.Action("AutoComplete")"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-search"></span>&nbsp;Pesquisar
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
 
-    @foreach (var item in Model)
+@*@using (Ajax.BeginForm(
+    new AjaxOptions
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitPrice)
-            </td>
-            <td>
-                @{
-                    var user = manager.FindById(item.CreatedBy);
-                    @Html.DisplayFor(modelItem => user.Name)
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationDate)
-            </td>
-            <td>
-                <a href="@Url.Action("Edit", "Products", new { id = item.ProductId })" class="btn btn-warning btn-xs">
-                    <span class="glyphicon glyphicon-edit"></span>&nbsp;Alterar
-                </a>
-                <a href="@Url.Action("Details", "Products", new { id = item.ProductId })" class="btn btn-info btn-xs">
-                    <span class="glyphicon glyphicon-th-list"></span>&nbsp;Detalhes
-                </a>
-                <a href="@Url.Action("Delete", "Products", new { id = item.ProductId })" class="btn btn-danger btn-xs">
-                    <span class="glyphicon glyphicon-remove"></span>&nbsp;Remover
-                </a>
-            </td>
-        </tr>
-    }
+        HttpMethod = "Get",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "listProducts",
+        OnBegin = "processing.showPleaseWait();",
+        OnComplete = "processing.hidePleaseWait();"
+    }))
+    {
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.Label("Pesquisar por Nome", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="search" name="ProductName" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-search"></span>&nbsp;Pesquisar
+                    </button>
+                </div>
+            </div>
+        </div>
+    }*@
 
-</table>
+    @Html.Partial("_ListProducts", Model)
 
-
+@Styles.Render("~/Content/redmond/css")
