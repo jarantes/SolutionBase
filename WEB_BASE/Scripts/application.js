@@ -12,6 +12,35 @@ processing = processing || (function () {
     };
 })();
 
-$(function() {
-    
-})
+function showMessage(message, title, type) {
+    var messagetype = "";
+
+    switch (type) {
+        case 'e':
+            messagetype = BootstrapDialog.TYPE_DANGER;
+            break;
+        case 's':
+            messagetype = BootstrapDialog.TYPE_SUCCESS;
+            break;
+        case 'w':
+            messagetype = BootstrapDialog.TYPE_WARNING;
+            break;
+        case 'i':
+            messagetype = BootstrapDialog.TYPE_INFO;
+            break;
+        default:
+            messagetype = BootstrapDialog.TYPE_PRIMARY;
+    }
+
+    var options = {
+        title: title,
+        message: message,
+        type: messagetype
+    }
+
+    BootstrapDialog.show(options);
+}
+
+function done() {
+    $('form').resetForm();
+}

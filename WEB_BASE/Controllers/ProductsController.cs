@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using WEB_BASE.Models;
 using WEB_BASE.Repository;
+using PagedList;
 
 namespace WEB_BASE.Controllers
 {
@@ -15,19 +16,29 @@ namespace WEB_BASE.Controllers
         private readonly UnitOfWork _unitOfWork = new UnitOfWork();
 
         // GET: Products
-        public ActionResult Index([Bind(Include = "ProductName")] string productName)
+        public ActionResult Index([Bind(Include = "ProductName, Page")] string productName, int page = 1)
         {
-            var products = _unitOfWork.ProductsRepository.DbSet.Include(p => p.Category);
-            if (!String.IsNullOrEmpty(productName))
-            {
-                products = products.Where(a => a.ProductName.Contains(productName));
-            }
+            var products = _unitOfWork.ProductsRepository.DbSet
+                .OrderByDescending(p => p.ProductName)
+                .Where(p => productName == null || p.ProductName.StartsWith(productName))
+                .Include(p => p.Category)
+                .Select(p => new ProductsViewModels
+                            {
+                                ProductId = p.ProductId,
+                                ProductCode = p.ProductCode,
+                                ProductName = p.ProductName,
+                                UnitPrice = p.UnitPrice,
+                                CreatedBy = p.CreatedBy,
+                                CreationDate = p.CreationDate,
+                                CategoryName = p.Category.CategoryName,
+                            }
+                        ).ToPagedList(page, 5);
+
             if (Request.IsAjaxRequest())
             {
-                //System.Threading.Thread.Sleep(2000);
-                return PartialView("_ListProducts", products.ToList());
+                return PartialView("_ListProducts", products);
             }
-            return View(products.ToList());
+            return View(products);
         }
 
         public ActionResult AutoComplete(string term)
@@ -78,7 +89,7 @@ namespace WEB_BASE.Controllers
                 _unitOfWork.ProductsRepository.Insert(productsModels);
                 _unitOfWork.ProductsRepository.Commit();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Create");
             }
 
             ViewBag.CategoryId = new SelectList(_unitOfWork.ProductsCategoryRepository.DbSet, "CategoryId", "CategoryName");

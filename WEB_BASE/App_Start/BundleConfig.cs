@@ -7,6 +7,7 @@ namespace WEB_BASE
         // Para obter mais informações sobre agrupamento, visite http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            //JavaScripts
             bundles.Add(new ScriptBundle("~/bundles/otf").Include(
                        "~/Scripts/jquery-{version}.js",
                        "~/Scripts/jquery-ui-{version}.js",
@@ -19,37 +20,32 @@ namespace WEB_BASE
                         "~/Scripts/jquery-{version}.js",
                         "~/Scripts/jquery.unobtrusive*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/application").Include(
-                     "~/Scripts/application.js",
-                     "~/Scripts/otf.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"));
-
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                "~/Scripts/jquery-ui-{version}.js"));
 
-
-            // Use a versão em desenvolvimento do Modernizr para desenvolver e aprender com ela. Após isso, quando você estiver
-            // pronto para produção, use a ferramenta de compilação em http://modernizr.com para selecionar somente os testes que você precisa.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/bootstrap-dialog.js",
+                      "~/Scripts/respond.js",
+                      "~/Scripts/bootstrapValidator.js"));
 
+            //**********************************************************************//
+            //Css
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                 //"~/Content/themes/base/jquery-ui.css",
-                    "~/Content/bootstrap.css",
-                    "~/Content/site.css"));
+                     "~/Content/style.css"));
+
+            bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
+                    "~/Content/bootstrap.min.css",
+                    "~/Content/bootstrap-dialog.css",
+                    "~/Content/bootstrapValidator.css"));
 
             bundles.Add(new StyleBundle("~/Content/redmond/css").Include(
                        "~/Content/themes/redmond/jquery-ui.css",
                        "~/Content/themes/redmond/jquery.ui.datepicker.css"));
 
-            // Definir EnableOptimizations como false para depuração. Para obter mais informações,
-            // visite http://go.microsoft.com/fwlink/?LinkId=301862
             BundleTable.EnableOptimizations = true;
         }
     }

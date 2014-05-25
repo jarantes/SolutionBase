@@ -1,33 +1,38 @@
 ﻿$(function () {
-    var ajaxFormSubmit = function () {
+    //***************** FORM SEARCH ********************
+    var ajaxFormSearchSubmit = function () {
 
         var $form = $(this);
 
         var options = {
             url: $form.attr("action"),
             type: $form.attr("method"),
-            data: $form.serialize()
-        };
+            data: $form.serialize(),
+            beforeSend: function () {
+                processing.showPleaseWait();
+            },
+            complete: function () {
+                processing.hidePleaseWait();
+            }
+        }
 
         $.ajax(options).done(function (data) {
-
             var $target = $($form.attr("data-otf-target"));
             $target.replaceWith(data);
-
-
         });
         return false;
     };
 
+    //*********** SUBMIT FORM AUTOCOMPLETE **************
     var submitAutocompleteform = function (event, ui) {
         var $input = $(this);
         $input.val(ui.item.label);
         var $form = $input.parents("form:first");
-        $form.attr("action", "/Products/Index"); // doesn't work on other pages
+        //$form.attr("action", "/Products/Index");
         $form.submit();
-
     };
 
+    //*********** AUTOCOMPLETE **************
     var createAutocomplete = function () {
         var $input = $(this);
 
@@ -40,6 +45,7 @@
         $input.autocomplete(options);
     };
 
+    //*********** PAGED LIST **************
     var getPage = function () {
         var $a = $(this);
 
@@ -56,7 +62,7 @@
         return false;
     };
 
-    $("form[data-otf-ajax='true']").submit(ajaxFormSubmit);
+    $("form[id='formSearch']").submit(ajaxFormSearchSubmit);
     $("input[data-otf-autocomplete]").each(createAutocomplete);
     $(".main-content").on("click", ".pagedList a[href]", getPage);
 
