@@ -23,7 +23,7 @@ namespace WEB_BASE.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProductsCategoryModels productsCategoryModels = _unitOfWork.ProductsCategoryRepository.GetById(id);
+            ProductCategoryModels productsCategoryModels = _unitOfWork.ProductsCategoryRepository.GetById(id);
             if (productsCategoryModels == null)
             {
                 return HttpNotFound();
@@ -40,7 +40,7 @@ namespace WEB_BASE.Controllers
         // POST: ProductsCategory/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CategoryId,CategoryName,CreatedBy,CreationDate,UpdatedBy,UpdatedDate")] ProductsCategoryModels productsCategoryModels)
+        public ActionResult Create([Bind(Include = "CategoryId,CategoryName,CreatedBy,CreationDate,UpdatedBy,UpdatedDate")] ProductCategoryModels productsCategoryModels)
         {
             if (ModelState.IsValid)
             {
@@ -60,7 +60,7 @@ namespace WEB_BASE.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProductsCategoryModels productsCategoryModels = _unitOfWork.ProductsCategoryRepository.GetById(id);
+            ProductCategoryModels productsCategoryModels = _unitOfWork.ProductsCategoryRepository.GetById(id);
             if (productsCategoryModels == null)
             {
                 return HttpNotFound();
@@ -71,7 +71,7 @@ namespace WEB_BASE.Controllers
         // POST: ProductsCategory/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CategoryId,CategoryName,CreatedBy,CreationDate,UpdatedBy,UpdatedDate")] ProductsCategoryModels productsCategoryModels)
+        public ActionResult Edit([Bind(Include = "CategoryId,CategoryName,CreatedBy,CreationDate,UpdatedBy,UpdatedDate")] ProductCategoryModels productsCategoryModels)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace WEB_BASE.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProductsCategoryModels productsCategoryModels = _unitOfWork.ProductsCategoryRepository.GetById(id);
+            ProductCategoryModels productsCategoryModels = _unitOfWork.ProductsCategoryRepository.GetById(id);
             if (productsCategoryModels == null)
             {
                 return HttpNotFound();
@@ -103,7 +103,7 @@ namespace WEB_BASE.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            ProductsCategoryModels productsCategoryModels = _unitOfWork.ProductsCategoryRepository.GetById(id);
+            ProductCategoryModels productsCategoryModels = _unitOfWork.ProductsCategoryRepository.GetById(id);
             _unitOfWork.ProductsCategoryRepository.Delete(productsCategoryModels);
             _unitOfWork.ProductsCategoryRepository.Commit();
             

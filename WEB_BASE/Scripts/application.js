@@ -1,4 +1,5 @@
-﻿var processing;
+﻿//retorno de feedback com modal(processando...)
+var processing;
 processing = processing || (function () {
     var pleaseWaitDiv = $('<div class="modal" data-backdrop="static" data-keyboard="false"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h2 class="modal-title">Processando...</h2></div><div class="modal-body"><div class="progress progress-striped active"><div class="progress-bar" style="width: 100%"></div></div></div></div></div></div>');
     return {
@@ -12,6 +13,7 @@ processing = processing || (function () {
     };
 })();
 
+//retorno de mensagem com modal
 function showMessage(message, title, type) {
     var messagetype = "";
 
@@ -41,6 +43,16 @@ function showMessage(message, title, type) {
     BootstrapDialog.show(options);
 }
 
+//limpar o form
 function done() {
     $('form').resetForm();
 }
+
+//Deixar o menu clicado ativo
+$(document).ready(function () {
+    var url = window.location;
+    $('ul.nav a[href="' + url + '"]').parent().addClass('active');
+    $('ul.nav a').filter(function () {
+        return this.href == url;
+    }).parent().addClass('active');
+});

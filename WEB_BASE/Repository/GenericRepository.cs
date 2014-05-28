@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using WEB_BASE.DataContexts;
 using WEB_BASE.Models;
 
 namespace WEB_BASE.Repository
 {
     public class GenericRepository<TEntity> where TEntity : class
     {
-        internal ApplicationFullContext Context;
+        internal ApplicationDb Context;
         internal DbSet<TEntity> DbSet;
 
-        public GenericRepository(ApplicationFullContext context)
+        public GenericRepository(ApplicationDb context)
         {
             Context = context;
             DbSet = context.Set<TEntity>();

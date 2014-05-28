@@ -7,6 +7,7 @@ using Microsoft.Owin.Security.DataProtection;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using System;
+using WEB_BASE.DataContexts;
 using WEB_BASE.Models;
 
 namespace WEB_BASE
@@ -17,7 +18,7 @@ namespace WEB_BASE
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configurar o contexto de bd e o gerenciador de usuários para usar uma única instância por solicitação
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
+            app.CreatePerOwinContext(IdentityDb.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
 
             // Habilitar o aplicativo a usar um cookie para armazenar informações do usuário logado

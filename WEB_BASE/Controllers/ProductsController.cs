@@ -61,7 +61,7 @@ namespace WEB_BASE.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProductsModels productsModels = _unitOfWork.ProductsRepository.GetById(id);
+            ProductModels productsModels = _unitOfWork.ProductsRepository.GetById(id);
             if (productsModels == null)
             {
                 return HttpNotFound();
@@ -79,7 +79,7 @@ namespace WEB_BASE.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,ProductCode,ProductName,UnitPrice,CategoryId")] ProductsModels productsModels)
+        public ActionResult Create([Bind(Include = "ProductId,ProductCode,ProductName,UnitPrice,CategoryId")] ProductModels productsModels)
         {
             if (ModelState.IsValid)
             {
@@ -103,7 +103,7 @@ namespace WEB_BASE.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProductsModels productsModels = _unitOfWork.ProductsRepository.GetById(id);
+            ProductModels productsModels = _unitOfWork.ProductsRepository.GetById(id);
             if (productsModels == null)
             {
                 return HttpNotFound();
@@ -115,7 +115,7 @@ namespace WEB_BASE.Controllers
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProductId,ProductCode,ProductName,UnitPrice,CategoryId,CreatedBy,CreationDate")] ProductsModels productsModels)
+        public ActionResult Edit([Bind(Include = "ProductId,ProductCode,ProductName,UnitPrice,CategoryId,CreatedBy,CreationDate")] ProductModels productsModels)
         {
             if (ModelState.IsValid)
             {
@@ -139,7 +139,7 @@ namespace WEB_BASE.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProductsModels productsModels = _unitOfWork.ProductsRepository.GetById(id);
+            ProductModels productsModels = _unitOfWork.ProductsRepository.GetById(id);
             if (productsModels == null)
             {
                 return HttpNotFound();
@@ -152,7 +152,7 @@ namespace WEB_BASE.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            ProductsModels productsModels = _unitOfWork.ProductsRepository.GetById(id);
+            ProductModels productsModels = _unitOfWork.ProductsRepository.GetById(id);
 
             _unitOfWork.ProductsRepository.Delete(productsModels);
             _unitOfWork.ProductsRepository.Commit();

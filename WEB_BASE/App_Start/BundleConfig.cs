@@ -29,8 +29,7 @@ namespace WEB_BASE
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/bootstrap-dialog.js",
-                      "~/Scripts/respond.js",
-                      "~/Scripts/bootstrapValidator.js"));
+                      "~/Scripts/respond.js"));
 
             //**********************************************************************//
             //Css
@@ -39,14 +38,13 @@ namespace WEB_BASE
 
             bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
                     "~/Content/bootstrap.min.css",
-                    "~/Content/bootstrap-dialog.css",
-                    "~/Content/bootstrapValidator.css"));
+                    "~/Content/bootstrap-dialog.css"));
 
             bundles.Add(new StyleBundle("~/Content/redmond/css").Include(
                        "~/Content/themes/redmond/jquery-ui.css",
                        "~/Content/themes/redmond/jquery.ui.datepicker.css"));
 
-            BundleTable.EnableOptimizations = true;
+            //BundleTable.EnableOptimizations = true;
         }
     }
 }

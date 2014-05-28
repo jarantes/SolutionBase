@@ -1,28 +1,29 @@
-﻿using WEB_BASE.Models;
+﻿using WEB_BASE.DataContexts;
+using WEB_BASE.Models;
 
 namespace WEB_BASE.Repository
 {
     public class UnitOfWork
     {
         //Instanciando o Contexto da Aplicação
-        private readonly ApplicationFullContext _ctx = new ApplicationFullContext();
+        private readonly ApplicationDb _ctx = new ApplicationDb();
 
         //Declarando as Entidades com Propriedades
-        private GenericRepository<ProductsModels> _productsRepository;
-        private GenericRepository<ProductsCategoryModels> _productsCategoryRepository;
+        private GenericRepository<ProductModels> _productsRepository;
+        private GenericRepository<ProductCategoryModels> _productsCategoryRepository;
 
-        public GenericRepository<ProductsModels> ProductsRepository
+        public GenericRepository<ProductModels> ProductsRepository
         {
             get { return _productsRepository ?? 
-                        (_productsRepository = new GenericRepository<ProductsModels>(_ctx)); }
+                        (_productsRepository = new GenericRepository<ProductModels>(_ctx)); }
         }
 
-        public GenericRepository<ProductsCategoryModels> ProductsCategoryRepository
+        public GenericRepository<ProductCategoryModels> ProductsCategoryRepository
         {
             get
             {
                 return _productsCategoryRepository ??
-                       (_productsCategoryRepository = new GenericRepository<ProductsCategoryModels>(_ctx));
+                       (_productsCategoryRepository = new GenericRepository<ProductCategoryModels>(_ctx));
             }
         }
 

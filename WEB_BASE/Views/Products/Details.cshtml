@@ -1,12 +1,12 @@
 ﻿@using Microsoft.AspNet.Identity
 @using Microsoft.AspNet.Identity.EntityFramework
-@using WEB_BASE.Models
-@model ProductsModels
+@using WEB_BASE.DataContexts
+@model ProductModels
 
 @{
     ViewBag.Title = "Detalhes do Produto";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+    var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new IdentityDb()));
 }
 
 <h2>@ViewBag.Title</h2>
