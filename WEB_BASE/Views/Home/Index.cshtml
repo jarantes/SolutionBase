@@ -10,10 +10,10 @@
 
 <div class="row">
     
-    <div class="col-md-4">
+    <div id="teste" class="col-md-4">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Introdução</h3>
+                <h3 class="panel-title">1º Introdução</h3>
             </div>
             <div class="panel-body">
                 <p>
@@ -28,10 +28,10 @@
     </div>
     
 
-    <div class="col-md-4">
+    <div id="teste2" class="col-md-4">
         <div class="panel panel-success">
             <div class="panel-heading">
-                <h3 class="panel-title">Obter mais bibliotecas</h3>
+                <h3 class="panel-title">2º Obter mais bibliotecas</h3>
             </div>
             <div class="panel-body">
                 <p>NuGet é uma extensão do Visual Studio gratuito que torna mais fácil para adicionar, remover e atualizar as bibliotecas e ferramentas em projetos do Visual Studio.</p>
@@ -40,10 +40,10 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div id="teste3" class="col-md-4">
         <div class="panel panel-warning">
             <div class="panel-heading">
-                <h3 class="panel-title">Web Hosting</h3>
+                <h3 class="panel-title">3º Web Hosting</h3>
             </div>
             <div class="panel-body">
                 <p>Você pode facilmente encontrar uma empresa de hospedagem que oferece a combinação certa de recursos e preço para as suas aplicações.</p>
@@ -53,3 +53,20 @@
     </div>
 
 </div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#teste').hide();
+            $('#teste2').hide();
+            $('#teste3').hide();
+
+            $('#teste').delay(1000).fadeIn("slow");
+
+            $('#teste2').delay(2000).fadeIn("slow");
+
+            $('#teste3').delay(3000).fadeIn("slow");
+        });
+    </script>
+}

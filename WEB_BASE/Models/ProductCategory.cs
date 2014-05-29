@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WEB_BASE.Models
 {
     [Table("ProductsCategory")]
-    public class ProductCategoryModels
+    public class ProductCategory
     {
         [Key]
         public int CategoryId { get; set; }
@@ -29,6 +29,6 @@ namespace WEB_BASE.Models
         [Display(Name = "Data da Atualização")]
         public DateTime? UpdatedDate { get; set; }
 
-        public IEnumerable<ProductModels> Products { get; set; }
+        public IEnumerable<Product> Products { get; set; }
     }
 }

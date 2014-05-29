@@ -190,11 +190,11 @@
       <DependentUpon>201405280059004_CriacaoInicial.cs</DependentUpon>
     </Compile>
     <Compile Include="DataContexts\ApplicationMigrations\Configuration.cs" />
-    <Compile Include="DataContexts\IdentityDb.cs" />
     <Compile Include="DataContexts\IdentityMigrations\201405280057313_CriacaoInicial.cs" />
     <Compile Include="DataContexts\IdentityMigrations\201405280057313_CriacaoInicial.Designer.cs">
       <DependentUpon>201405280057313_CriacaoInicial.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataContexts\IdentityDb.cs" />
     <Compile Include="DataContexts\IdentityMigrations\Configuration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -202,10 +202,10 @@
     <Compile Include="Helper\HtmlHelperExtends.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ModuleModels.cs" />
-    <Compile Include="Models\ProductCategoryModels.cs" />
+    <Compile Include="Models\Module.cs" />
+    <Compile Include="Models\ProductCategory.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
-    <Compile Include="Models\ProductModels.cs" />
+    <Compile Include="Models\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\GenericRepository.cs" />
     <Compile Include="Repository\UnitOfWork.cs" />

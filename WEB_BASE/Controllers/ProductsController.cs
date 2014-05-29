@@ -22,7 +22,7 @@ namespace WEB_BASE.Controllers
                 .OrderByDescending(p => p.ProductName)
                 .Where(p => productName == null || p.ProductName.StartsWith(productName))
                 .Include(p => p.Category)
-                .Select(p => new ProductsViewModels
+                .Select(p => new ProductViewModels
                             {
                                 ProductId = p.ProductId,
                                 ProductCode = p.ProductCode,
@@ -36,6 +36,7 @@ namespace WEB_BASE.Controllers
 
             if (Request.IsAjaxRequest())
             {
+                System.Threading.Thread.Sleep(2000);
                 return PartialView("_ListProducts", products);
             }
             return View(products);
@@ -61,7 +62,7 @@ namespace WEB_BASE.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProductModels productsModels = _unitOfWork.ProductsRepository.GetById(id);
+            Product productsModels = _unitOfWork.ProductsRepository.GetById(id);
             if (productsModels == null)
             {
                 return HttpNotFound();
@@ -79,7 +80,7 @@ namespace WEB_BASE.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,ProductCode,ProductName,UnitPrice,CategoryId")] ProductModels productsModels)
+        public ActionResult Create([Bind(Include = "ProductId,ProductCode,ProductName,UnitPrice,CategoryId")] Product productsModels)
         {
             if (ModelState.IsValid)
             {
@@ -89,8 +90,12 @@ namespace WEB_BASE.Controllers
                 _unitOfWork.ProductsRepository.Insert(productsModels);
                 _unitOfWork.ProductsRepository.Commit();
 
+                TempData["success"] = "Cadastro efetuado com sucesso.";
+
                 return RedirectToAction("Create");
             }
+
+            TempData["error"] = "Erro ao efetuar cadastro.";
 
             ViewBag.CategoryId = new SelectList(_unitOfWork.ProductsCategoryRepository.DbSet, "CategoryId", "CategoryName");
             return View(productsModels);
@@ -103,7 +108,7 @@ namespace WEB_BASE.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProductModels productsModels = _unitOfWork.ProductsRepository.GetById(id);
+            Product productsModels = _unitOfWork.ProductsRepository.GetById(id);
             if (productsModels == null)
             {
                 return HttpNotFound();
@@ -115,7 +120,7 @@ namespace WEB_BASE.Controllers
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProductId,ProductCode,ProductName,UnitPrice,CategoryId,CreatedBy,CreationDate")] ProductModels productsModels)
+        public ActionResult Edit([Bind(Include = "ProductId,ProductCode,ProductName,UnitPrice,CategoryId,CreatedBy,CreationDate")] Product productsModels)
         {
             if (ModelState.IsValid)
             {
@@ -139,7 +144,7 @@ namespace WEB_BASE.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProductModels productsModels = _unitOfWork.ProductsRepository.GetById(id);
+            Product productsModels = _unitOfWork.ProductsRepository.GetById(id);
             if (productsModels == null)
             {
                 return HttpNotFound();
@@ -152,7 +157,7 @@ namespace WEB_BASE.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            ProductModels productsModels = _unitOfWork.ProductsRepository.GetById(id);
+            Product productsModels = _unitOfWork.ProductsRepository.GetById(id);
 
             _unitOfWork.ProductsRepository.Delete(productsModels);
             _unitOfWork.ProductsRepository.Commit();

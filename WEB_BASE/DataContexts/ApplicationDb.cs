@@ -12,8 +12,8 @@ namespace WEB_BASE.DataContexts
         }
 
         //DBset da aplicação
-        public DbSet<ProductModels> Products { get; set; }
-        public DbSet<ProductCategoryModels> Categorys { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductCategory> Categorys { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

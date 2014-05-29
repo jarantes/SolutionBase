@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
 @using Microsoft.AspNet.Identity.EntityFramework
 @using WEB_BASE.DataContexts
-@model IPagedList<ProductsViewModels>
+@model IPagedList<ProductViewModels>
 @{
     var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new IdentityDb()));
 }

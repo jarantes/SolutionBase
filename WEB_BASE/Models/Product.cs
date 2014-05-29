@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WEB_BASE.Models
 {
     [Table("Products")]
-    public class ProductModels
+    public class Product
     {
         [Key]
         public int ProductId { get; set; }
@@ -41,10 +41,10 @@ namespace WEB_BASE.Models
         public DateTime? UpdatedDate { get; set; }
 
         [ForeignKey("CategoryId")]
-        public virtual ProductCategoryModels Category { get; set; }
+        public virtual ProductCategory Category { get; set; }
     }
 
-    public class ProductsViewModels
+    public class ProductViewModels
     {
         public int ProductId { get; set; }
 

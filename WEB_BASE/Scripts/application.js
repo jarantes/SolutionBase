@@ -50,9 +50,17 @@ function done() {
 
 //Deixar o menu clicado ativo
 $(document).ready(function () {
+
     var url = window.location;
     $('ul.nav a[href="' + url + '"]').parent().addClass('active');
     $('ul.nav a').filter(function () {
         return this.href == url;
     }).parent().addClass('active');
+
+    $('.alert-danger, .alert-success').fadeTo('slow', 1);
+    $('.alert-danger, .alert-success').fadeTo(400, 0.5);
+    $('.alert-danger, .alert-success').fadeTo(200, 1);
+    $('.alert-danger, .alert-success').delay(4000).slideToggle('slow');
+
+
 });

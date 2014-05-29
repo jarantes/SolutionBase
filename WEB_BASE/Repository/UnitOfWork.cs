@@ -9,21 +9,21 @@ namespace WEB_BASE.Repository
         private readonly ApplicationDb _ctx = new ApplicationDb();
 
         //Declarando as Entidades com Propriedades
-        private GenericRepository<ProductModels> _productsRepository;
-        private GenericRepository<ProductCategoryModels> _productsCategoryRepository;
+        private GenericRepository<Product> _productsRepository;
+        private GenericRepository<ProductCategory> _productsCategoryRepository;
 
-        public GenericRepository<ProductModels> ProductsRepository
+        public GenericRepository<Product> ProductsRepository
         {
             get { return _productsRepository ?? 
-                        (_productsRepository = new GenericRepository<ProductModels>(_ctx)); }
+                        (_productsRepository = new GenericRepository<Product>(_ctx)); }
         }
 
-        public GenericRepository<ProductCategoryModels> ProductsCategoryRepository
+        public GenericRepository<ProductCategory> ProductsCategoryRepository
         {
             get
             {
                 return _productsCategoryRepository ??
-                       (_productsCategoryRepository = new GenericRepository<ProductCategoryModels>(_ctx));
+                       (_productsCategoryRepository = new GenericRepository<ProductCategory>(_ctx));
             }
         }
 
