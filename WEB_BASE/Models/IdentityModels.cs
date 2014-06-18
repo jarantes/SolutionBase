@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System.Data.Entity;
 
 namespace WEB_BASE.Models
 {
@@ -11,7 +11,8 @@ namespace WEB_BASE.Models
     public class ApplicationUser : IdentityUser
     {
         public string Name { get; set; }
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public string FavoriteColor { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

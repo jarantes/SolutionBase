@@ -1,0 +1,81 @@
+﻿@model WEB_BASE.Models.Module
+
+@{
+    ViewBag.Title = "Remover Módulo";
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Tem certeza de que deseja excluir este?</h3>
+<div>
+    <hr />
+    <dl class="well dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ModuleName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModuleName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Controller)
+        </dt>
+
+        <dd>
+            @{
+                var controller = Model.Controller ?? "-";
+            }
+            @controller
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Action)
+        </dt>
+
+        <dd>
+            @{
+                var action = Model.Action ?? "-";
+            }
+            @action
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Icon)
+        </dt>
+
+        <dd>
+            @{
+                var icon = Model.Icon ?? "-";
+            }
+            @icon
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ParentModuleId)
+        </dt>
+
+        <dd>
+            @{
+                var parentModuleId = Model.ParentModuleId ?? 0;
+            }
+            @parentModuleId
+        </dd>
+
+    </dl>
+
+   @using (Html.BeginForm())
+   {
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-danger">
+            <span class="glyphicon glyphicon-remove"></span>&nbsp;Remover
+        </button>
+        <a href="@Url.Action("Index", "Module")" class="btn btn-default">
+            <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Voltar para Lista
+        </a>
+    </div>
+   }
+</div>

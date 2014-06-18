@@ -6,7 +6,7 @@ namespace WEB_BASE.DataContexts.ApplicationMigrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             MigrationsDirectory = @"DataContexts\ApplicationMigrations";
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace WEB_BASE.Models
@@ -68,6 +69,10 @@ namespace WEB_BASE.Models
         [DataType(DataType.Date, ErrorMessage = "A data informada é inválida"), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Data de Aniversário")]
         public DateTime BirthDate { get; set; }
+
+        [Required]
+        [Display(Name = "Cores Favoritas")]
+        public List<string> FavoriteColor { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "O/A {0} deve ter no mínimo {2} caracteres.", MinimumLength = 6)]

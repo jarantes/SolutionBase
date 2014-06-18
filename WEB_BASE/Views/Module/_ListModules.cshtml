@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Module>
+
+<table class="table table-striped table-bordered table-responsive table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ModuleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Controller)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Action)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Icon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParentModuleId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModuleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Controller)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Action)
+                </td>
+                <td>
+                    <span class="glyphicon @item.Icon"></span>&nbsp;
+                    @Html.DisplayFor(modelItem => item.Icon)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParentModuleId)
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "Module", new {id = item.ModuleId})" class="btn btn-warning btn-xs" data-toggle="tooltip" data-original-title="Editar">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+                    <a href="@Url.Action("Details", "Module", new { id = item.ModuleId })" class="btn btn-info btn-xs" data-toggle="tooltip" data-original-title="Detalhes">
+                        <span class="glyphicon glyphicon-th-list"></span>
+                    </a>
+                    <a href="@Url.Action("Delete", "Module", new { id = item.ModuleId })" class="btn btn-danger btn-xs" data-toggle="tooltip" data-original-title="Excluir">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

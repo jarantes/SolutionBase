@@ -18,7 +18,7 @@
 
         $.ajax(options).done(function (data) {
             var $target = $($form.attr("data-otf-target"));
-            $target.replaceWith(data);
+            $target.replaceWith('<div id="listProducts">' +data + '</div>');
         });
         return false;
     };

@@ -4,14 +4,13 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using WEB_BASE.DataContexts;
-using WEB_BASE.Models;
 
 namespace WEB_BASE.Repository
 {
     public class GenericRepository<TEntity> where TEntity : class
     {
-        internal ApplicationDb Context;
-        internal DbSet<TEntity> DbSet;
+        public ApplicationDb Context;
+        public DbSet<TEntity> DbSet;
 
         public GenericRepository(ApplicationDb context)
         {

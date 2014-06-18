@@ -1,0 +1,63 @@
+﻿@using Microsoft.AspNet.Identity
+@using WEB_BASE.Repository
+@{
+    var unitOfWork = new UnitOfWork();
+    var userId = User.Identity.GetUserId();
+    var module = unitOfWork.ModulesRepository.DbSet.Where(m => m.ParentModuleId == null).OrderBy(m => m.ModuleName).ToList();
+    //var module = from mod in unitOfWork.ModulesRepository.DbSet
+    //    join modAccess in unitOfWork.ModuleUserAccessRepository.DbSet on mod.ModuleId equals modAccess.ModuleId
+    //    where modAccess.UserId == userId
+    //    select mod;
+    var i = 1;
+}
+@if (module.Any())
+{
+    <div class="col-sm-3 col-md-3">
+        <div class="panel-group" id="accordion">
+            @foreach (var mod in module)
+            {
+                string id;
+                string idAux;
+                {
+                    id = "collapse" + i;
+                    idAux = "#" + id;
+                }
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="@idAux">
+                                @{
+                                    var icon = "glyphicon " + mod.Icon;
+                                }
+                                <span class="@icon">
+                                </span>@mod.ModuleName @*Content*@
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="@id" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <table class="table">
+                                @foreach (var subMod in mod.SubModules.OrderBy(m => m.ModuleName))
+                                {
+                                    <tr>
+                                        @{icon = "glyphicon " + subMod.Icon;}
+                                        <td>
+                                            <span class="@icon"></span>
+                                            <a href="@Url.Action(subMod.Action, subMod.Controller)">
+                                                @subMod.ModuleName
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {
+                    i++;
+                }
+            }
+        </div>
+    </div>
+}

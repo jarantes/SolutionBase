@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Owin;
 using WEB_BASE.Models;
 
 namespace WEB_BASE.Controllers
@@ -18,6 +12,7 @@ namespace WEB_BASE.Controllers
     public class AccountController : Controller
     {
         private ApplicationUserManager _userManager;
+        private readonly Util _util = new Util();
 
         public AccountController()
         {
@@ -28,7 +23,8 @@ namespace WEB_BASE.Controllers
             UserManager = userManager;
         }
 
-        public ApplicationUserManager UserManager {
+        public ApplicationUserManager UserManager
+        {
             get
             {
                 return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -78,6 +74,7 @@ namespace WEB_BASE.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            ViewBag.Colors = _util.GetAllColors();
             return View();
         }
 
@@ -90,12 +87,20 @@ namespace WEB_BASE.Controllers
         {
             if (ModelState.IsValid)
             {
+                var colorsSelected = "";
+                var i = 0;
+                foreach (var c in model.FavoriteColor)
+                {
+                    colorsSelected = i > 0 ? colorsSelected + "," + c : c;
+                    i++;
+                }
                 var user = new ApplicationUser
                 {
                     UserName = model.Email,
                     Email = model.Email,
                     Name = model.Name,
-                    BirthDate = model.BirthDate
+                    BirthDate = model.BirthDate,
+                    FavoriteColor = colorsSelected
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -125,7 +130,7 @@ namespace WEB_BASE.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
-            if (userId == null || code == null) 
+            if (userId == null || code == null)
             {
                 return View("Error");
             }
@@ -185,13 +190,13 @@ namespace WEB_BASE.Controllers
         {
             return View();
         }
-	
+
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
-            if (code == null) 
+            if (code == null)
             {
                 return View("Error");
             }
@@ -419,13 +424,13 @@ namespace WEB_BASE.Controllers
                     if (result.Succeeded)
                     {
                         await SignInAsync(user, isPersistent: false);
-                        
+
                         // Para obter mais informações sobre como habilitar a confirmação de conta e a redefinição de senha, visite http://go.microsoft.com/fwlink/?LinkID=320771
                         // Enviar um email com este link
                         // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                         // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                         // SendEmail(user.Email, callbackUrl, "Confirmar sua conta", "Confirme sua conta clicando neste link");
-                        
+
                         return RedirectToLocal(returnUrl);
                     }
                 }
@@ -535,7 +540,8 @@ namespace WEB_BASE.Controllers
 
         private class ChallengeResult : HttpUnauthorizedResult
         {
-            public ChallengeResult(string provider, string redirectUri) : this(provider, redirectUri, null)
+            public ChallengeResult(string provider, string redirectUri)
+                : this(provider, redirectUri, null)
             {
             }
 

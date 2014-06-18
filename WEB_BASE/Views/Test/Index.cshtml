@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Testes de Implementação";
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form class="form-horizontal">
+
+    <h2><a class="anchor" href="#">Multiple Select com Jquery Chosen</a></h2>
+    <div class="form-group">
+        <label class="col-lg-3 control-label">Favorite color</label>
+        <div class="col-lg-5">
+            <select name="colors" class="form-control chosen-select"
+                    multiple data-placeholder="Choose 2-4 colors">
+                <option value="black">Black</option>
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+                <option value="orange">Orange</option>
+                <option value="red">Red</option>
+                <option value="yellow">Yellow</option>
+                <option value="white">White</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquerychosen")
+    <script type="text/javascript">
+        var config = {
+            '.chosen-select': {},
+            '.chosen-select-deselect': { allow_single_deselect: true },
+            '.chosen-select-no-single': { disable_search_threshold: 10 },
+            '.chosen-select-no-results': { no_results_text: 'Oops, nothing found!' },
+            '.chosen-select-width': { width: "95%" }
+        }
+        for (var selector in config) {
+            $(selector).chosen(config[selector]);
+        }
+    </script>
+}
+
+
+
+

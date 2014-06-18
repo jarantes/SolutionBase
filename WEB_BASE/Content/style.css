@@ -1,3 +1,22 @@
+body {
+    margin-top: 50px;
+}
+
+.glyphicon {
+    margin-right: 10px;
+}
+
+.panel-body {
+    padding: 0px;
+}
+
+    .panel-body table tr td {
+        padding-left: 15px;
+    }
+
+    .panel-body .table {
+        margin-bottom: 0px;
+    }
 
 body {
     padding-top: 50px;
@@ -29,7 +48,7 @@ body {
 
 .field-validation-valid {
     display: none;
- }
+}
 
 input.input-validation-error {
     border: 1px solid #b94a48;
@@ -49,10 +68,16 @@ input[type="checkbox"].input-validation-error {
 
 /* styles for removing the background from form */
 .no-color {
-  background-color: white;
-  border-style:none;
+    background-color: white;
+    border-style: none;
 }
 
 .hide {
     display: none;
+}
+
+.default {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: initial;
 }

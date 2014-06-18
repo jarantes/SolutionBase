@@ -11,6 +11,8 @@ namespace WEB_BASE.Repository
         //Declarando as Entidades com Propriedades
         private GenericRepository<Product> _productsRepository;
         private GenericRepository<ProductCategory> _productsCategoryRepository;
+        private GenericRepository<Module> _modulesRepository;
+        private GenericRepository<ModuleUserAccess> _modulesUserAccessRepository; 
 
         public GenericRepository<Product> ProductsRepository
         {
@@ -27,5 +29,22 @@ namespace WEB_BASE.Repository
             }
         }
 
+        public GenericRepository<Module> ModulesRepository
+        {
+            get
+            {
+                return _modulesRepository ??
+                       (_modulesRepository = new GenericRepository<Module>(_ctx));
+            }
+        }
+
+        public GenericRepository<ModuleUserAccess> ModuleUserAccessRepository
+        {
+            get
+            {
+                return _modulesUserAccessRepository ??
+                       (_modulesUserAccessRepository = new GenericRepository<ModuleUserAccess>(_ctx));
+            }
+        }
     }
 }

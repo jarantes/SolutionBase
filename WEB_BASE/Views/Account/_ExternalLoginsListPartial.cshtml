@@ -1,30 +1,68 @@
-﻿@using WEB_BASE.Models
-@model ExternalLoginListViewModel
+﻿@model ExternalLoginListViewModel
 @using Microsoft.Owin.Security
 
 <h4>Use outro serviço para fazer login.</h4>
 <hr />
 @{
     var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
-    if (loginProviders.Count() == 0)
+    var authenticationDescriptions = loginProviders as AuthenticationDescription[] ?? loginProviders.ToArray();
+    if (!authenticationDescriptions.Any())
     {
         <div>
-            <p>Não há serviços de autenticação externos configurados. Consulte <a href="http://go.microsoft.com/fwlink/?LinkId=313242">este artigo</a>
-            para conhecer os detalhes da configuração do aplicativo ASP.NET para suporte ao login por meio de serviços externos.</p>
+            <p>
+                Não há serviços de autenticação externos configurados. Consulte <a href="http://go.microsoft.com/fwlink/?LinkId=313242">este artigo</a>
+                para conhecer os detalhes da configuração do aplicativo ASP.NET para suporte ao login por meio de serviços externos.
+            </p>
         </div>
+        @*<div class="row">
+            <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                    <img data-src="holder.js/100%x180" alt="Conta do Facebook" src="~/Content/Image/facebook.png" data-toggle="tooltip" data-original-title="Conta do Facebook" />
+                </a>
+            </div>
+
+            <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                    <img data-src="holder.js/100%x180" alt="Conta do Google" src="~/Content/Image/google.png" data-toggle="tooltip" data-original-title="Conta do Google" />
+                </a>
+            </div>
+
+            <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                    <img data-src="holder.js/100%x180" alt="Conta do Twitter" src="~/Content/Image/twitter.png" data-toggle="tooltip" data-original-title="Conta do Twitter" />
+                </a>
+            </div>
+
+            <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                    <img data-src="holder.js/100%x180" alt="Conta da Microsoft" src="~/Content/Image/microsoft.png" data-toggle="tooltip" data-original-title="Conta da Microsoft" />
+                </a>
+            </div>
+        </div>*@
     }
     else
     {
-        using (Html.BeginForm(Model.Action, "Account", new { ReturnUrl = Model.ReturnUrl }))
+        using (Html.BeginForm(Model.Action, "Account", new { Model.ReturnUrl }))
         {
             @Html.AntiForgeryToken()
             <div id="socialLoginList">
-                <p>
-                @foreach (AuthenticationDescription p in loginProviders)
+                @*<div class="row">*@
+                @foreach (AuthenticationDescription p in authenticationDescriptions)
                 {
-                    <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Faça login usando sua conta @p.Caption">@p.AuthenticationType</button>
+                    <p>
+                        <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" data-toggle="tooltip" data-original-title="Faça login usando sua conta @p.Caption">@p.AuthenticationType</button>
+                    </p>
+                        @*<input name="provider" value="@p.AuthenticationType" style="display: none;"/>
+                        <div class="col-xs-6 col-md-3">
+                            <a href="javascript:document.getElementById('externalAuth').submit()" class="thumbnail">
+                                @{
+                                    var src = "/Content/Image/" + p.AuthenticationType.ToLower() + ".png";
+                                }
+                                <img data-src="holder.js/100%x180" alt="Faça login usando sua conta @p.Caption" src="@src" data-toggle="tooltip" data-original-title="Faça login usando sua conta @p.Caption" />
+                            </a>
+                        </div>*@
                 }
-                </p>
+                @*</div>*@
             </div>
         }
     }

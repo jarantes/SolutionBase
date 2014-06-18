@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Module>
+
+@{
+    ViewBag.Title = "Lista de Módulos";
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr/>
+<div class="small">
+
+    <p>
+        <a href="@Url.Action("Create", "Module")" class="btn btn-sm btn-primary">
+            <span class="glyphicon glyphicon-plus"></span>&nbsp;Criar Novo
+        </a>
+    </p>
+
+    @Html.Partial("_ListModules", Model)
+</div>
