@@ -1,0 +1,27 @@
+﻿@model IEnumerable<ListUsersViewModel>
+
+@{
+    ViewBag.Title = "Lista de Usuários";
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+<div class="small">
+    <p>
+        <a href="@Url.Action("Create", "Account")" class="btn btn-sm btn-primary">
+            <span class="glyphicon glyphicon-plus"></span>&nbsp;Criar Novo
+        </a>
+    </p>  
+    
+    <div id="listUsers">
+        @Html.Partial("_ListUsers", Model)
+    </div>
+</div>
+
+@Styles.Render("~/Content/redmond/css")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,22 @@
+﻿<div class="row">
+    <div id="teste2" class="col-md-6">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">Tudo Certo!</h3>
+            </div>
+            <div class="panel-body">
+                <p>O produto foi inserido com sucesso.</p>
+                <p>
+                    Clique no botão abaixo para cadastrar um novo produto.
+                </p>
+                <p>@Ajax.ActionLink("Novo", "Create", "Product",
+                    new AjaxOptions
+                    {
+                        HttpMethod = "Get",
+                        InsertionMode = InsertionMode.Replace,
+                        UpdateTargetId = "AjaxForm",
+                    }, new { @class = "btn btn-primary" })</p>
+            </div>
+        </div>
+    </div>
+</div>

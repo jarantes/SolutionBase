@@ -1,0 +1,81 @@
+﻿@using System.Web.UI.WebControls
+@using Trirand.Web.Mvc
+@model ManageAccessViewModels
+
+@{
+    ViewBag.Title = "Liberar Módulo";
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Erro!</strong> @TempData["error"].ToString()
+    </div>
+}
+
+@if (TempData["success"] != null)
+{
+    <div class="alert alert-dismissable alert-success">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Sucesso!</strong> @TempData["success"].ToString()
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    <div id="components" class="well form-horizontal">
+        <fieldset>
+            <legend>Liberação Módulos</legend>
+
+            <div class="form-group">
+                @Html.Label("Usuário", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("UserId", null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Acessos", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+
+                    @Html.Trirand().JQTreeView(
+                        new JQTreeView
+                        {
+                            DataUrl = Url.Action("TreeView_CheckBoxes_DataRequested"),
+                            Height = Unit.Pixel(200),
+                            Width = Unit.Pixel(300),
+                            CheckBoxes = true
+                        }, "CheckBoxesTreeView")
+                </div>
+            </div>
+            
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-floppy-saved"></span>&nbsp;Salvar
+                    </button>
+                </div>
+            </div>
+
+        </fieldset>
+    </div>
+}
+
+<div>
+    <a href="@Url.Action("Index", "Module")" class="btn btn-default">
+        <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Voltar para Lista
+    </a>
+</div>
+
+@Styles.Render("~/Content/redmond/css")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+}

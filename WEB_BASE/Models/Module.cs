@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Drawing.Printing;
 
 namespace WEB_BASE.Models
 {
@@ -23,12 +22,14 @@ namespace WEB_BASE.Models
         [Display(Name = "Ícone")]
         public string Icon { get; set; }
 
+        [Display(Name = "Módulo Pai")]
         public int? ParentModuleId { get; set; }
 
         [ForeignKey("ParentModuleId")]
         public virtual IList<Module> SubModules { get; set; }
     }
 
+    [Table("ModuleUserAccess")]
     public class ModuleUserAccess
     {
         [Key]
@@ -41,4 +42,14 @@ namespace WEB_BASE.Models
         [ForeignKey("ModuleId")]
         public virtual IEnumerable<Module> Modules { get; set; }
     }
+
+    public class ManageAccessViewModels
+    {
+        [Required(ErrorMessage = "Favor selecionar o usuário")]
+        public string UserId { get; set; }
+
+        public string CheckBoxesTreeView_checkedState { get; set; }
+    }
 }
+
+

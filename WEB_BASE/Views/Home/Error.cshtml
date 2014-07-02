@@ -1,0 +1,33 @@
+﻿@model dynamic
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/bootstrap")
+    <title>Acesso Negado</title>
+</head>
+<body style="padding: 20px">
+    <div class="container">
+        <div class="row alert alert-dismissable alert-danger">
+            <div class="col-md-10">
+                <h1>Oops..! Não foi desta vez.. :(</h1>
+                <br />
+                <h3>Ocorreu um erro ao processar a solicitação. Tente novamente mais tarde!</h3>
+            </div>
+            <div class="col-md-2">
+                <img height="120" width="120" src="~/Content/Image/icone_error.png" alt="error" />
+            </div>
+        </div>
+        <a href="@Url.Action("Index", "Home")" class="btn btn-default">
+            <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Voltar para Inicio
+        </a>
+
+    </div>
+</body>
+</html>

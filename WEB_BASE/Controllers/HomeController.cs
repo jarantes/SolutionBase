@@ -22,5 +22,16 @@ namespace WEB_BASE.Controllers
 
             return View();
         }
+
+        public ActionResult AccessDenied()
+        {
+            ViewBag.UrlDenied = Session["UrlDenied"].ToString();
+            return View();
+        }
+
+        public ActionResult Error()
+        {
+            return View();
+        }
     }
 }

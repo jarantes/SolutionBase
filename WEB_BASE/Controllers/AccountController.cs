@@ -1,10 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WEB_BASE.Models;
+using WEB_BASE.Repository;
 
 namespace WEB_BASE.Controllers
 {
@@ -13,6 +18,7 @@ namespace WEB_BASE.Controllers
     {
         private ApplicationUserManager _userManager;
         private readonly Util _util = new Util();
+        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
 
         public AccountController()
         {
@@ -32,6 +38,59 @@ namespace WEB_BASE.Controllers
             private set
             {
                 _userManager = value;
+            }
+        }
+
+        //
+        // GET: /Account/Index
+        public ActionResult Index()
+        {
+            var model = UserManager.Users.Select(u => new ListUsersViewModel
+            {
+                Id = u.Id,
+                BirthDate = u.BirthDate,
+                Name = u.Name,
+                Email = u.Email,
+                EmailConfirmed = u.EmailConfirmed,
+                FavoriteColor = u.FavoriteColor,
+                UserName = u.UserName,
+                LockoutEnabled = u.LockoutEnabled
+            });
+            return View(model);
+        }
+
+        public ActionResult DisableEnableUser(string id)
+        {
+            Thread.Sleep(1000);
+            try
+            {
+                if (id == null)
+                {
+                    return HttpNotFound();
+                }
+                var user = UserManager.Users.First(u => u.Id == id);
+
+                user.LockoutEnabled = !user.LockoutEnabled;
+
+                UserManager.Update(user);
+
+                var model = UserManager.Users.Select(u => new ListUsersViewModel
+                {
+                    Id = u.Id,
+                    BirthDate = u.BirthDate,
+                    Name = u.Name,
+                    Email = u.Email,
+                    EmailConfirmed = u.EmailConfirmed,
+                    FavoriteColor = u.FavoriteColor,
+                    UserName = u.UserName,
+                    LockoutEnabled = u.LockoutEnabled
+                });
+                return PartialView("_ListUsers", model);
+            }
+            catch (Exception)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                //return JavaScript("showMessage('Erro', 'Ocorreu um erro ao processar a solicitação!', 'danger');");
             }
         }
 
@@ -57,6 +116,11 @@ namespace WEB_BASE.Controllers
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
+
+                    //Gravar Acessos do Usuário
+                    var access = _unitOfWork.GetAllAccessUser(user.Id);
+                    Session["UserAccess"] = access.ToList();
+
                     return RedirectToLocal(returnUrl);
                 }
                 else
@@ -105,15 +169,17 @@ namespace WEB_BASE.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInAsync(user, isPersistent: false);
+                    //await SignInAsync(user, false);
 
                     // Para obter mais informações sobre como ativar a confirmação de senha e a redefinição de senha, visite http://go.microsoft.com/fwlink/?LinkID=320771
                     // Enviar um email com este link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirmar sua conta", "Confirme sua conta clicando <a href=\"" + callbackUrl + "\">aqui</a>");
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "Confirmar sua conta", "Confirme sua conta clicando <a href=\"" + callbackUrl + "\">aqui</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    ViewBag.Email = user.Email;
+
+                    return View("EmailSended");
                 }
                 else
                 {
@@ -121,8 +187,15 @@ namespace WEB_BASE.Controllers
                 }
             }
 
+            ViewBag.Colors = _util.GetAllColors();
+
             // Se chegamos até aqui e houver alguma falha, exiba novamente o formulário
             return View(model);
+        }
+
+        public ActionResult EmailSended()
+        {
+            return View();
         }
 
         //
@@ -132,7 +205,7 @@ namespace WEB_BASE.Controllers
         {
             if (userId == null || code == null)
             {
-                return View("Error");
+                return RedirectToAction("Error", "Home");
             }
 
             IdentityResult result = await UserManager.ConfirmEmailAsync(userId, code);
@@ -198,7 +271,7 @@ namespace WEB_BASE.Controllers
         {
             if (code == null)
             {
-                return View("Error");
+                return RedirectToAction("Error", "Home");
             }
             return View();
         }
@@ -416,14 +489,14 @@ namespace WEB_BASE.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 IdentityResult result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
-                        await SignInAsync(user, isPersistent: false);
+                        await SignInAsync(user, false);
 
                         // Para obter mais informações sobre como habilitar a confirmação de conta e a redefinição de senha, visite http://go.microsoft.com/fwlink/?LinkID=320771
                         // Enviar um email com este link
@@ -464,7 +537,7 @@ namespace WEB_BASE.Controllers
         {
             var linkedAccounts = UserManager.GetLogins(User.Identity.GetUserId());
             ViewBag.ShowRemoveButton = HasPassword() || linkedAccounts.Count > 1;
-            return (ActionResult)PartialView("_RemoveAccountPartial", linkedAccounts);
+            return PartialView("_RemoveAccountPartial", linkedAccounts);
         }
 
         protected override void Dispose(bool disposing)
@@ -492,7 +565,7 @@ namespace WEB_BASE.Controllers
         private async Task SignInAsync(ApplicationUser user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, await user.GenerateUserIdentityAsync(UserManager));
+            AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, await user.GenerateUserIdentityAsync(UserManager));
         }
 
         private void AddErrors(IdentityResult result)

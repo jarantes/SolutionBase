@@ -3,11 +3,14 @@
 @{
     var unitOfWork = new UnitOfWork();
     var userId = User.Identity.GetUserId();
-    var module = unitOfWork.ModulesRepository.DbSet.Where(m => m.ParentModuleId == null).OrderBy(m => m.ModuleName).ToList();
-    //var module = from mod in unitOfWork.ModulesRepository.DbSet
-    //    join modAccess in unitOfWork.ModuleUserAccessRepository.DbSet on mod.ModuleId equals modAccess.ModuleId
-    //    where modAccess.UserId == userId
-    //    select mod;
+    
+    var query = from mod in unitOfWork.ModulesRepository.DbSet          
+        join modAccess in unitOfWork.ModuleUserAccessRepository.DbSet on mod.ModuleId equals modAccess.ModuleId
+        where modAccess.UserId == userId
+              && mod.ParentModuleId == null
+        select mod;
+       
+    var module = query.ToList();
     var i = 1;
 }
 @if (module.Any())
@@ -31,22 +34,29 @@
                                     var icon = "glyphicon " + mod.Icon;
                                 }
                                 <span class="@icon">
-                                </span>@mod.ModuleName @*Content*@
+                                </span>@mod.ModuleName
                             </a>
                         </h4>
                     </div>
                     <div id="@id" class="panel-collapse collapse">
                         <div class="panel-body">
                             <table class="table">
-                                @foreach (var subMod in mod.SubModules.OrderBy(m => m.ModuleName))
-                                {
+                                @{
+                                    var modCopy = mod;
+                                    var subQuery = from sm in mod.SubModules
+                                        join modAccess in unitOfWork.ModuleUserAccessRepository.DbSet on sm.ModuleId equals modAccess.ModuleId
+                                        where modAccess.UserId == userId
+                                              && sm.ParentModuleId == modCopy.ModuleId
+                                        select sm;
+                                    var subModule = subQuery.ToList();
+                                }
+                                @foreach (var subMod in subModule.OrderBy(m => m.ModuleName))
+                                {                 
                                     <tr>
                                         @{icon = "glyphicon " + subMod.Icon;}
                                         <td>
                                             <span class="@icon"></span>
-                                            <a href="@Url.Action(subMod.Action, subMod.Controller)">
-                                                @subMod.ModuleName
-                                            </a>
+                                            @Html.ActionLink(subMod.ModuleName, subMod.Action, subMod.Controller)
                                         </td>
                                     </tr>
                                 }

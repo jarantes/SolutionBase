@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -18,6 +19,15 @@ namespace WEB_BASE.Controllers
         // GET: Products
         public ActionResult Index([Bind(Include = "SearchString, SortOrder, CurrentFilter, Page")] string searchString, string sortOrder, string currentFilter, int? page)
         {
+            if (!_unitOfWork.ValidUserAccess((List<Module>) Session["UserAccess"],
+                                             ControllerContext.RouteData.Values["action"].ToString(),
+                                             ControllerContext.RouteData.Values["controller"].ToString(),
+                                             User.Identity.GetUserId()))
+            {
+                Session.Add("UrlDenied", ControllerContext.RouteData.Values["controller"] + "/" + ControllerContext.RouteData.Values["action"]);
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
             ViewBag.NameParam = String.IsNullOrEmpty(sortOrder) ? "Name_Desc" : "";
             ViewBag.DateParam = sortOrder == "Date" ? "Date_Desc" : "Date";
 
@@ -55,16 +65,16 @@ namespace WEB_BASE.Controllers
 
             switch (sortOrder)
             {
-                case "Name_Desc" :
+                case "Name_Desc":
                     products = products.OrderByDescending(p => p.ProductName);
                     break;
-                case "Date" :
+                case "Date":
                     products = products.OrderBy(p => p.CreationDate);
                     break;
-                case "Date_Desc" : 
+                case "Date_Desc":
                     products = products.OrderByDescending(p => p.CreationDate);
                     break;
-                default :
+                default:
                     products = products.OrderBy(p => p.ProductName);
                     break;
             }
@@ -101,7 +111,8 @@ namespace WEB_BASE.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Error", "Home");
             }
             Product productsModels = _unitOfWork.ProductsRepository.GetById(id);
             if (productsModels == null)
@@ -115,6 +126,10 @@ namespace WEB_BASE.Controllers
         public ActionResult Create()
         {
             ViewBag.CategoryId = new SelectList(_unitOfWork.ProductsCategoryRepository.DbSet, "CategoryId", "CategoryName");
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_FormCreate");
+            }
             return View();
         }
 
@@ -131,15 +146,12 @@ namespace WEB_BASE.Controllers
                 _unitOfWork.ProductsRepository.Insert(productsModels);
                 _unitOfWork.ProductsRepository.Commit();
 
-                TempData["success"] = "Cadastro efetuado com sucesso.";
-
-                return RedirectToAction("Create");
+                ViewBag.CategoryId = new SelectList(_unitOfWork.ProductsCategoryRepository.DbSet, "CategoryId", "CategoryName");
+                return PartialView("_CreateSuccess");
             }
 
-            TempData["error"] = "Erro ao efetuar cadastro.";
-
             ViewBag.CategoryId = new SelectList(_unitOfWork.ProductsCategoryRepository.DbSet, "CategoryId", "CategoryName");
-            return View(productsModels);
+            return PartialView("_FormCreate", productsModels);
         }
 
         // GET: Products/Edit/5
@@ -168,7 +180,6 @@ namespace WEB_BASE.Controllers
                 productsModels.UpdatedDate = DateTime.Now;
                 productsModels.UpdatedBy = User.Identity.GetUserId();
 
-                //_unitOfWork.ProductsRepository.Context.Entry(productsModels).State = EntityState.Modified;
                 _unitOfWork.ProductsRepository.Update(productsModels);
                 _unitOfWork.ProductsRepository.Commit();
 

@@ -1,4 +1,4 @@
-﻿@model WEB_BASE.Models.RegisterViewModel
+﻿@model RegisterViewModel
 @{
     ViewBag.Title = "Registre-se";
 }
@@ -20,7 +20,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.BirthDate, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.BirthDate, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.BirthDate, new { @class = "form-control", @id = "datepicker" })
         </div>
     </div>
     <div class="form-group">
@@ -60,9 +60,14 @@
     </div>
 }
 
+@Styles.Render("~/Content/redmond/css")
+
+
 @section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jquerychosen")
+
     <script type="text/javascript">
         var config = {
             '.chosen-select': {},
@@ -74,5 +79,19 @@
         for (var selector in config) {
             $(selector).chosen(config[selector]);
         }
+
+        $(function () {
+            $("#datepicker").datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                showAnim: "slideDown"
+            });
+        });
     </script>
 }

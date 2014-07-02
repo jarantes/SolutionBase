@@ -1,4 +1,6 @@
-﻿using WEB_BASE.DataContexts;
+﻿using System.Collections.Generic;
+using System.Linq;
+using WEB_BASE.DataContexts;
 using WEB_BASE.Models;
 
 namespace WEB_BASE.Repository
@@ -45,6 +47,25 @@ namespace WEB_BASE.Repository
                 return _modulesUserAccessRepository ??
                        (_modulesUserAccessRepository = new GenericRepository<ModuleUserAccess>(_ctx));
             }
+        }
+
+        public bool ValidUserAccess(List<Module> access , string action, string controller, string userId)
+        {
+            if (access == null)
+            {
+                access = GetAllAccessUser(userId);
+            }
+            return access.Any(a => a.Action == action && a.Controller == controller);
+        }
+
+        public List<Module> GetAllAccessUser(string userId)
+        {
+             var query =from mod in ModulesRepository.DbSet
+                   join modAccess in ModuleUserAccessRepository.DbSet on mod.ModuleId equals
+                       modAccess.ModuleId
+                   where modAccess.UserId == userId
+                   select mod;
+            return query.ToList();
         }
     }
 }

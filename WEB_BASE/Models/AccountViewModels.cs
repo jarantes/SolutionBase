@@ -114,4 +114,29 @@ namespace WEB_BASE.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
+
+    public class ListUsersViewModel
+    {
+        public string Id { get; set; }
+
+        [Display(Name = "Nome")]
+        public string Name { get; set; }
+
+        [Display(Name = "Data Aniversário")]
+        public DateTime? BirthDate { get; set; }
+
+        [Display(Name = "Core(s) Favorita(s)")]
+        public string FavoriteColor { get; set; }
+
+        [Display(Name = "E-mail")]
+        public string Email { get; set; }
+
+        [Display(Name = "E-mail Confirmado")]
+        public bool EmailConfirmed { get; set; }
+        
+        [Display(Name = "Usuário")]
+        public string UserName { get; set; }
+
+        public bool LockoutEnabled { get; set; }
+    }
 }

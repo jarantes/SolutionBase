@@ -35,8 +35,37 @@ $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
 
-function SelectIcon() {
+function selectIcon() {
     var valorCombo = $('#Icon').val();
     $('#iconSelected').removeClass();
     $('#iconSelected').addClass('glyphicon ' + valorCombo);
+}
+
+function showMessage(title, message, type) {
+    var icon = null;
+    switch (type) {
+        case 'info':
+            icon = 'glyphicon glyphicon-info-sign';
+            break;
+        case 'success':
+            icon = 'glyphicon glyphicon-ok-sign';
+            break;
+        case 'danger':
+            icon = 'glyphicon glyphicon-remove-sign';
+            break;
+        case 'warning':
+            icon = 'glyphicon glyphicon-exclamation-sign';
+            break;
+        default: icon = 'glyphicon glyphicon-info-sign';
+    }
+    $.growl({
+        title: title,
+        icon: icon,
+        type: type,
+        message: message,
+        position: {
+            from: "top",
+            align: "right"
+        },
+    });
 }
