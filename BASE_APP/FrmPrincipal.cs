@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using BASE_APP.Annotations;
+using BASE_APP.Models;
 
 namespace BASE_APP
 {
@@ -27,7 +28,8 @@ namespace BASE_APP
 
         private void FrmPrincipal_Load(object sender, EventArgs e)
         {
-            tssStatus.Text = "";
+            tss1.Text = "";
+            tss2.Text = "";
             tssUserLogged.Text = "";
             tssVersion.Text = "";
             var frm = new FrmLogin();
@@ -41,7 +43,7 @@ namespace BASE_APP
 
         public void GetMenu()
         {
-            tssStatus.Text = @"Carregando Menus...";
+            tss1.Text = @"Carregando Menus...";
             tssUserLogged.Text = UserDescription;
             tssVersion.Text = Application.ProductVersion;
             try
@@ -88,7 +90,8 @@ namespace BASE_APP
             mnuPrincipal.Items.Add(mnuSobre);
             mnuPrincipal.Items.Add(mnuSair);
 
-            tssStatus.Text = @"Logado";
+            tss1.Text = @"Usuario:";
+            tss2.Text = @"  Versão:";
         }
 
         private void GetMenuRecursivo(ToolStripDropDownItem mnuItem, int parentModuleId)
@@ -128,7 +131,7 @@ namespace BASE_APP
             }
 
             Refresh();
-            APP_MODULES module;
+            AppModules module;
             try
             {
                 module = _db.GetModuleById(Convert.ToInt16(((ToolStripMenuItem) sender).Tag));

@@ -1,4 +1,4 @@
-﻿<div class="row">
+﻿<div class="row fadeIndSlow">
     <div id="teste2" class="col-md-6">
         <div class="panel panel-success">
             <div class="panel-heading">
@@ -9,14 +9,21 @@
                 <p>
                     Clique no botão abaixo para cadastrar um novo produto.
                 </p>
-                <p>@Ajax.ActionLink("Novo", "Create", "Product",
-                    new AjaxOptions
-                    {
-                        HttpMethod = "Get",
-                        InsertionMode = InsertionMode.Replace,
-                        UpdateTargetId = "AjaxForm",
-                    }, new { @class = "btn btn-primary" })</p>
+                <p>
+                    @Ajax.ActionLink("Novo", "Create", "Product",
+                        new AjaxOptions
+                        {
+                            HttpMethod = "Get",
+                            InsertionMode = InsertionMode.Replace,
+                            UpdateTargetId = "AjaxForm",
+                        }, new { @class = "btn btn-primary" })
+                </p>
             </div>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $('.fadeIndSlow').fadeIn('slow');
+    });
+</script>

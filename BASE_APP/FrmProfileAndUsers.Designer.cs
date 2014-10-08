@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmProfileAndUsers));
             this.label1 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tssStatus = new System.Windows.Forms.ToolStripStatusLabel();
@@ -66,12 +67,12 @@
             this.label6 = new System.Windows.Forms.Label();
             this.txtUserDescription = new System.Windows.Forms.TextBox();
             this.txtUserName = new System.Windows.Forms.TextBox();
-            this.picLogo = new System.Windows.Forms.PictureBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.cmdLimpar = new System.Windows.Forms.ToolStripButton();
             this.cmdNovo = new System.Windows.Forms.ToolStripButton();
             this.cmdSalvar = new System.Windows.Forms.ToolStripButton();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.picLogo = new System.Windows.Forms.PictureBox();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabProfile.SuspendLayout();
@@ -80,15 +81,16 @@
             this.tabUsers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdUsers)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Trebuchet MS", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.label1.Location = new System.Drawing.Point(12, 44);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(142, 24);
@@ -121,10 +123,12 @@
             this.tabControl1.Controls.Add(this.tabProfile);
             this.tabControl1.Controls.Add(this.tabUsers);
             this.tabControl1.Location = new System.Drawing.Point(0, 85);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(585, 326);
             this.tabControl1.TabIndex = 4;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabProfile
             // 
@@ -134,8 +138,9 @@
             this.tabProfile.Controls.Add(this.label2);
             this.tabProfile.Controls.Add(this.grdProfile);
             this.tabProfile.Location = new System.Drawing.Point(4, 25);
+            this.tabProfile.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabProfile.Name = "tabProfile";
-            this.tabProfile.Padding = new System.Windows.Forms.Padding(3);
+            this.tabProfile.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabProfile.Size = new System.Drawing.Size(577, 297);
             this.tabProfile.TabIndex = 0;
             this.tabProfile.Text = "Perfis";
@@ -158,8 +163,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treeModulos.CheckBoxes = true;
             this.treeModulos.Location = new System.Drawing.Point(184, 98);
+            this.treeModulos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.treeModulos.Name = "treeModulos";
-            this.treeModulos.Size = new System.Drawing.Size(387, 193);
+            this.treeModulos.Size = new System.Drawing.Size(387, 191);
             this.treeModulos.TabIndex = 6;
             // 
             // gpbInfoPerfil
@@ -167,8 +173,10 @@
             this.gpbInfoPerfil.Controls.Add(this.label3);
             this.gpbInfoPerfil.Controls.Add(this.txtProfile);
             this.gpbInfoPerfil.Location = new System.Drawing.Point(184, 6);
+            this.gpbInfoPerfil.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gpbInfoPerfil.Name = "gpbInfoPerfil";
-            this.gpbInfoPerfil.Size = new System.Drawing.Size(216, 71);
+            this.gpbInfoPerfil.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.gpbInfoPerfil.Size = new System.Drawing.Size(228, 71);
             this.gpbInfoPerfil.TabIndex = 5;
             this.gpbInfoPerfil.TabStop = false;
             this.gpbInfoPerfil.Text = "Infomações do Perfil";
@@ -185,7 +193,8 @@
             // 
             // txtProfile
             // 
-            this.txtProfile.Location = new System.Drawing.Point(6, 37);
+            this.txtProfile.Location = new System.Drawing.Point(9, 36);
+            this.txtProfile.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtProfile.Name = "txtProfile";
             this.txtProfile.Size = new System.Drawing.Size(201, 20);
             this.txtProfile.TabIndex = 0;
@@ -215,12 +224,13 @@
             this.CreationDate,
             this.ProfileID});
             this.grdProfile.Location = new System.Drawing.Point(6, 28);
+            this.grdProfile.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.grdProfile.MultiSelect = false;
             this.grdProfile.Name = "grdProfile";
             this.grdProfile.ReadOnly = true;
             this.grdProfile.RowHeadersWidth = 8;
             this.grdProfile.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grdProfile.Size = new System.Drawing.Size(168, 263);
+            this.grdProfile.Size = new System.Drawing.Size(168, 260);
             this.grdProfile.TabIndex = 3;
             this.grdProfile.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdProfiles_CellClick);
             // 
@@ -262,8 +272,9 @@
             this.tabUsers.Controls.Add(this.grdUsers);
             this.tabUsers.Controls.Add(this.groupBox1);
             this.tabUsers.Location = new System.Drawing.Point(4, 25);
+            this.tabUsers.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabUsers.Name = "tabUsers";
-            this.tabUsers.Padding = new System.Windows.Forms.Padding(3);
+            this.tabUsers.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabUsers.Size = new System.Drawing.Size(577, 297);
             this.tabUsers.TabIndex = 1;
             this.tabUsers.Text = "Usuário";
@@ -302,6 +313,7 @@
             this.CreatedBy,
             this.Activated});
             this.grdUsers.Location = new System.Drawing.Point(6, 113);
+            this.grdUsers.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.grdUsers.MultiSelect = false;
             this.grdUsers.Name = "grdUsers";
             this.grdUsers.ReadOnly = true;
@@ -311,6 +323,8 @@
             this.grdUsers.TabIndex = 1;
             this.grdUsers.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdUsers_CellClick);
             this.grdUsers.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.grdUsers_CellFormatting);
+            this.grdUsers.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdUsers_CellMouseLeave);
+            this.grdUsers.CellMouseMove += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.grdUsers_CellMouseMove);
             // 
             // Edit2
             // 
@@ -409,7 +423,9 @@
             this.groupBox1.Controls.Add(this.txtUserDescription);
             this.groupBox1.Controls.Add(this.txtUserName);
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Size = new System.Drawing.Size(565, 78);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
@@ -431,6 +447,7 @@
             this.cboProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboProfile.FormattingEnabled = true;
             this.cboProfile.Location = new System.Drawing.Point(367, 39);
+            this.cboProfile.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cboProfile.Name = "cboProfile";
             this.cboProfile.Size = new System.Drawing.Size(167, 24);
             this.cboProfile.TabIndex = 8;
@@ -457,29 +474,23 @@
             // 
             // txtUserDescription
             // 
-            this.txtUserDescription.Location = new System.Drawing.Point(130, 40);
+            this.txtUserDescription.Location = new System.Drawing.Point(130, 39);
+            this.txtUserDescription.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtUserDescription.Name = "txtUserDescription";
             this.txtUserDescription.Size = new System.Drawing.Size(213, 20);
             this.txtUserDescription.TabIndex = 1;
             // 
             // txtUserName
             // 
-            this.txtUserName.Location = new System.Drawing.Point(6, 40);
+            this.txtUserName.Location = new System.Drawing.Point(6, 39);
+            this.txtUserName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(100, 20);
             this.txtUserName.TabIndex = 0;
             // 
-            // picLogo
-            // 
-            this.picLogo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.picLogo.Location = new System.Drawing.Point(473, 28);
-            this.picLogo.Name = "picLogo";
-            this.picLogo.Size = new System.Drawing.Size(100, 50);
-            this.picLogo.TabIndex = 3;
-            this.picLogo.TabStop = false;
-            // 
             // toolStrip1
             // 
+            this.toolStrip1.BackColor = System.Drawing.SystemColors.ControlDark;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmdLimpar,
             this.cmdNovo,
@@ -514,6 +525,7 @@
             // cmdSalvar
             // 
             this.cmdSalvar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdSalvar.Enabled = false;
             this.cmdSalvar.Image = global::BASE_APP.Properties.Resources.disk;
             this.cmdSalvar.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.cmdSalvar.Name = "cmdSalvar";
@@ -525,18 +537,30 @@
             // 
             this.errorProvider.ContainerControl = this;
             // 
+            // picLogo
+            // 
+            this.picLogo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.picLogo.Image = global::BASE_APP.Properties.Resources.favicon_fw;
+            this.picLogo.Location = new System.Drawing.Point(489, 24);
+            this.picLogo.Name = "picLogo";
+            this.picLogo.Size = new System.Drawing.Size(89, 81);
+            this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picLogo.TabIndex = 6;
+            this.picLogo.TabStop = false;
+            // 
             // FrmProfileAndUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(585, 437);
+            this.Controls.Add(this.picLogo);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.picLogo);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "FrmProfileAndUsers";
             this.Text = "Perfis/Usuários";
@@ -554,10 +578,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.grdUsers)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -568,7 +592,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel tssStatus;
-        private System.Windows.Forms.PictureBox picLogo;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabProfile;
         private System.Windows.Forms.TabPage tabUsers;
@@ -608,6 +631,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn UserID;
         private System.Windows.Forms.DataGridViewTextBoxColumn CreatedBy;
         private System.Windows.Forms.DataGridViewTextBoxColumn Activated;
+        private System.Windows.Forms.PictureBox picLogo;
     }
 }
 

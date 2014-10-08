@@ -7,7 +7,7 @@
 
 <h2>@ViewBag.Title</h2>
 <hr/>
-<div class="small">
+<div class="small fadeIndSlow">
 
     <p>
         <a href="@Url.Action("Create", "Module")" class="btn btn-sm btn-primary">
@@ -17,3 +17,9 @@
 
     @Html.Partial("_ListModules", Model)
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('.fadeIndSlow').fadeIn('slow');
+    });
+</script>  

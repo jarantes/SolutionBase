@@ -1,4 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Net;
+using System.Net.Mail;
+using System.Net.Mime;
+using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -17,7 +22,7 @@ namespace WEB_BASE
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<IdentityDb>()));
             // Configurar a lógica de validação para nomes de usuário
@@ -61,7 +66,28 @@ namespace WEB_BASE
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // Conecte o seu serviço de email aqui para enviar um email.
+            return SendMail(message);
+        }
+
+        protected Task SendMail(IdentityMessage message)
+        {
+            var text = message.Body;
+            var html = message.Body;
+
+            html += HttpUtility.HtmlEncode(@"Or click on the copy the following link on the browser:" + message.Body);
+
+            var msg = new MailMessage {From = new MailAddress("jarantes17@gmail.com")};
+            msg.To.Add(new MailAddress(message.Destination));
+            msg.Subject = message.Subject;
+            msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(text, null, MediaTypeNames.Text.Plain));
+            msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(html, null, MediaTypeNames.Text.Html));
+
+            var smtpClient = new SmtpClient("smtp.gmail.com", Convert.ToInt32(587));
+            var credentials = new NetworkCredential("jarantes17@gmail.com", "arantes12");
+            smtpClient.Credentials = credentials;
+            smtpClient.EnableSsl = true;
+            smtpClient.Send(msg);
+
             return Task.FromResult(0);
         }
     }

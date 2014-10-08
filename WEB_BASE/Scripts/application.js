@@ -33,6 +33,8 @@ $(document).ready(function () {
     $('.alert-danger, .alert-success').delay(4000).slideToggle('slow');
 
     $('[data-toggle="tooltip"]').tooltip();
+
+    $('.fadeIndSlow').fadeIn('slow');
 });
 
 function selectIcon() {
@@ -67,5 +69,8 @@ function showMessage(title, message, type) {
             from: "top",
             align: "right"
         },
+        template: {
+            title_divider: '<hr class="separator" />'
+        }
     });
 }

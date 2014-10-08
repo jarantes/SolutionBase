@@ -169,7 +169,7 @@
 		offset: 20,
 		spacing: 10,
 		z_index: 1031,
-		fade_in: 400,
+		fade_in: 600,
 		delay: 5000,
 		pause_on_mouseover: false,
 		onGrowlShow: null,
@@ -181,7 +181,7 @@
 			container: '<div class="col-xs-10 col-sm-10 col-md-3 alert" role="alert">',
 			dismiss: '<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>',
 			title: '<strong>',
-			title_divider: '',
+			title_divider: '<hr class="separator" />',
 			message: ''
 		}
 	};

@@ -7,6 +7,7 @@ namespace BASE_APP
     public partial class FrmLogin : Form
     {
         private readonly AppDatabaseUtil _db = new AppDatabaseUtil();
+        private readonly AppFormUtil _frmUtil = new AppFormUtil();
 
         public FrmLogin()
         {
@@ -14,15 +15,16 @@ namespace BASE_APP
         }
 
         private FrmPrincipal _frmPrincipal;
+        private bool IsAuthenticated;
 
         private void txtUserName_GotFocus(object sender, EventArgs e)
         {
-            tssStatus.Text = @"Informe o usuário";
+            _frmUtil.SetMessageError(ref tssStatus, true, @"Informe o usuário", AppFormUtil.StatusForm.Info);
         }
 
         private void txtPassword_GotFocus(object sender, EventArgs e)
         {
-            tssStatus.Text = @"Informe a senha";
+            _frmUtil.SetMessageError(ref tssStatus, true, @"Informe a senha", AppFormUtil.StatusForm.Info);
         }
 
         private void btnSair_Click(object sender, EventArgs e)
@@ -32,7 +34,7 @@ namespace BASE_APP
 
         private void btnEntrar_GotFocus(object sender, EventArgs e)
         {
-            tssStatus.Text = "";
+            _frmUtil.SetMessageError(ref tssStatus, false, null, null);
         }
 
         public void ShowMe(FrmPrincipal frmPrincipal)
@@ -43,20 +45,49 @@ namespace BASE_APP
 
         private void btnEntrar_Click(object sender, EventArgs e)
         {
-            if (ValidaDados())
+            ValidaDados();
+        }
+
+        private void ValidaDados()
+        {
+            if (!ValidaInput()) return;
+
+            _frmUtil.SetMessageError(ref tssStatus, true, @"Logando...", AppFormUtil.StatusForm.Info);
+
+            //Setando a propriedade de usuário
+            _db.ClearPropertys();
+            _db.User.UserName = txtUserName.Text;
+            _db.User.Password = txtPassword.Text;
+
+            picLoading.Visible = true;
+
+            try
             {
-                _frmPrincipal.GetMenu();
-                Close();
+                backgroundWorker1.RunWorkerAsync();
+            }
+            catch (Exception)
+            {
+                picLoading.Visible = false;
+                picLoading.Refresh();
+                _frmUtil.SetMessageError(ref tssStatus, true, @"Erro ao autenticar usuário", AppFormUtil.StatusForm.Error);
             }
         }
 
-        private bool ValidaDados()
+        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            if (!ValidaInput()) return false;
-            if (!_db.Signon(txtUserName.Text, txtPassword.Text))
+            IsAuthenticated = _db.Signon();
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            picLoading.Visible = false;
+            picLoading.Refresh();
+
+            //Se não houve erro compara o resultado
+            if (!IsAuthenticated)
             {
-                MessageBox.Show(@"Usuário ou Senha incorretos", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                _frmUtil.SetMessageError(ref tssStatus, true, @"Usuário ou Senha incorretos", AppFormUtil.StatusForm.Error);
+                return;
             }
 
             var user = _db.GetUserByName(txtUserName.Text);
@@ -64,7 +95,9 @@ namespace BASE_APP
             FrmPrincipal.UserName = user.UserName;
             FrmPrincipal.ProfileId = user.ProfileID;
             FrmPrincipal.UserDescription = user.UserDescription;
-            return true;
+
+            _frmPrincipal.GetMenu();
+            Close();
         }
 
         private bool ValidaInput()
@@ -72,16 +105,14 @@ namespace BASE_APP
             if (txtUserName.Text.Length == 0)
             {
                 errorProvider.SetError(txtUserName, Resources.VALIDATE_USERNAME);
-                MessageBox.Show(Resources.VALIDATE_USERNAME, Text, MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
+                _frmUtil.SetMessageError(ref tssStatus, true, Resources.VALIDATE_USERNAME, AppFormUtil.StatusForm.Error);
                 return false;
             }
 
             if (txtPassword.Text.Length == 0)
             {
                 errorProvider.SetError(txtPassword, Resources.VALIDATE_PASSWORD);
-                MessageBox.Show(Resources.VALIDATE_PASSWORD, Text, MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
+                _frmUtil.SetMessageError(ref tssStatus, true, Resources.VALIDATE_PASSWORD, AppFormUtil.StatusForm.Error);
                 return false;
             }
             errorProvider.Clear();
@@ -90,7 +121,7 @@ namespace BASE_APP
 
         private void txtUserName_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char) 13)
+            if (e.KeyChar == (char)13)
             {
                 txtPassword.Focus();
             }
@@ -98,7 +129,7 @@ namespace BASE_APP
 
         private void txtPassword_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char) 13)
+            if (e.KeyChar == (char)13)
             {
                 btnEntrar_Click(sender, e);
             }

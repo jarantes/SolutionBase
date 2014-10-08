@@ -28,7 +28,7 @@
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div id="components" class="well form-horizontal">
+    <div id="components" class="well form-horizontal fadeIndSlow">
         <fieldset>
             <legend>Modelo de Módulos</legend>
 
@@ -63,7 +63,7 @@
                     <span id="iconSelected"></span>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 @Html.LabelFor(model => model.ParentModuleId, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -92,4 +92,9 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('.fadeIndSlow').fadeIn('slow');
+        });
+    </script>
 }

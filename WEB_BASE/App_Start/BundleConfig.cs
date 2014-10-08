@@ -19,7 +19,6 @@ namespace WEB_BASE
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                          "~/Scripts/jquery.unobtrusive*"
                         ,"~/Scripts/jquery.validate*"
-                        ,"~/Scripts/jquery.ambiance*"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(

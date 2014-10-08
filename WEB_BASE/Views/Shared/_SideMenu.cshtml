@@ -57,6 +57,16 @@
                                         <td>
                                             <span class="@icon"></span>
                                             @Html.ActionLink(subMod.ModuleName, subMod.Action, subMod.Controller)
+                                            @*@Ajax.ActionLink(subMod.ModuleName, subMod.Action, subMod.Controller,
+    new AjaxOptions
+    {
+        HttpMethod = "Get",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "listUsers",
+        OnBegin = "processing.showPleaseWait();",
+        OnComplete = "processing.hidePleaseWait();",
+        OnFailure = "showMessage('Erro', 'Ocorreu um erro ao processar a solicitação!', 'danger');",
+    })*@
                                         </td>
                                     </tr>
                                 }

@@ -3,6 +3,7 @@ using System.Data.Entity.Core;
 using System.Drawing;
 using System.Windows.Forms;
 using BASE_APP.Properties;
+using BASE_APP.Models;
 
 namespace BASE_APP
 {
@@ -10,6 +11,7 @@ namespace BASE_APP
     {
         readonly AppDatabaseUtil _db = new AppDatabaseUtil();
         readonly AppFunctionsUtil _fn = new AppFunctionsUtil();
+        readonly AppFormUtil _frmUtil = new AppFormUtil();
         private int _profileId;
         private int _userId;
         private TreeNode _nodeItem;
@@ -29,7 +31,7 @@ namespace BASE_APP
 
         private void FrmProfileAndUsers_Load(object sender, EventArgs e)
         {
-            tssStatus.Text = "";
+            _frmUtil.SetMessageError(ref tssStatus, false, null, null);
 
             txtProfile.GotFocus += Control_GotFocus;
             txtUserDescription.GotFocus += Control_GotFocus;
@@ -45,7 +47,7 @@ namespace BASE_APP
             GetAllUsers();
 
             var dt = _fn.ToDataTable(_db.GetAllProfiles());
-            _fn.Combo(ref cboProfile, dt, "ProfileDescription", "ProfileID", "Selecione");
+            _frmUtil.Combo(ref cboProfile, dt, "ProfileDescription", "ProfileID", "Selecione");
         }
 
         private void GetAllUsers()
@@ -98,10 +100,12 @@ namespace BASE_APP
             {
                 ControlesUsuarios(TypeTransaction.New);
             }
+            cmdSalvar.Enabled = true;
         }
 
         private void cmdSalvar_Click(object sender, EventArgs e)
         {
+            cmdSalvar.Enabled = false;
             if (tabControl1.SelectedIndex == 0)
             {
                 ControlesPerfil(TypeTransaction.Save);
@@ -166,8 +170,10 @@ namespace BASE_APP
             {
                 MessageBox.Show(Resources.ERRO_UPDATE_USER + ex.Message, Text, MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+                cmdSalvar.Enabled = true;
                 return;
             }
+            _frmUtil.SetMessageError(ref tssStatus, true, "Usuário atualizado com sucesso!", AppFormUtil.StatusForm.Success);
             GetAllUsers();
             ControlesUsuarios(TypeTransaction.Clear);
         }
@@ -177,7 +183,7 @@ namespace BASE_APP
             if (!ValidaUser()) return;
             try
             {
-                var user = new APP_USERS
+                var user = new AppUsers
                 {
                     UserName = txtUserName.Text,
                     UserDescription = txtUserDescription.Text,
@@ -194,8 +200,10 @@ namespace BASE_APP
             {
                 MessageBox.Show(Resources.ERROR_INSERT_USER + ex.Message, Text, MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+                cmdSalvar.Enabled = true;
                 return;
             }
+            _frmUtil.SetMessageError(ref tssStatus, true, "Usuário inserido com sucesso!", AppFormUtil.StatusForm.Success);
             GetAllUsers();
         }
 
@@ -204,26 +212,27 @@ namespace BASE_APP
             if (txtUserName.Text == string.Empty)
             {
                 errorProvider.SetError(txtUserName, Resources.VALIDATE_USERNAME);
-                MessageBox.Show(Resources.VALIDATE_USERNAME, Text, MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
+                _frmUtil.SetMessageError(ref tssStatus, true, Resources.VALIDATE_USERNAME, AppFormUtil.StatusForm.Error);
+                cmdSalvar.Enabled = true;
                 return false;
             }
 
             if (txtUserDescription.Text == string.Empty)
             {
                 errorProvider.SetError(txtUserDescription, Resources.VALIDATE_USER_DESCRIPTION);
-                MessageBox.Show(Resources.VALIDATE_USER_DESCRIPTION, Text, MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
+                _frmUtil.SetMessageError(ref tssStatus, true, Resources.VALIDATE_USER_DESCRIPTION, AppFormUtil.StatusForm.Error);
+                cmdSalvar.Enabled = true;
                 return false;
             }
 
             if (cboProfile.SelectedIndex < 0)
             {
                 errorProvider.SetError(cboProfile, Resources.VALIDADE_PROFILE);
-                MessageBox.Show(Resources.VALIDADE_PROFILE, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                _frmUtil.SetMessageError(ref tssStatus, true, Resources.VALIDADE_PROFILE, AppFormUtil.StatusForm.Error);
                 return false;
             }
             errorProvider.Clear();
+            _frmUtil.SetMessageError(ref tssStatus, false, null, null);
             return true;
         }
 
@@ -306,6 +315,7 @@ namespace BASE_APP
 
         private void UpdateProfile()
         {
+            if (!ValidaProfile()) return;
             try
             {
                 var profile = _db.GetProfileById(_profileId);
@@ -320,7 +330,7 @@ namespace BASE_APP
                     if (node.Checked)
                     {
                         var moduleId = Convert.ToInt32(node.Tag);
-                        var profileClass = new APP_PROFILE_CLASS { ProfileID = _profileId, ModuleID = moduleId };
+                        var profileClass = new AppProfileClass { ProfileID = _profileId, ModuleID = moduleId };
                         _db.InsertProfileClass(profileClass);
                     }
                     AddNodeFilho(node);
@@ -331,8 +341,10 @@ namespace BASE_APP
             {
                 MessageBox.Show(Resources.ERROR_UPDATE_PROFILE + ex.Message, Text, MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+                cmdSalvar.Enabled = true;
                 return;
             }
+            _frmUtil.SetMessageError(ref tssStatus, true, "Perfil atualizado com sucesso!", AppFormUtil.StatusForm.Success);
             GetAllProfiles();
             ControlesPerfil(TypeTransaction.Clear);
         }
@@ -344,7 +356,7 @@ namespace BASE_APP
                 if (nodeitem.Checked)
                 {
                     var moduleId = Convert.ToInt32(nodeitem.Tag);
-                    var profileClass = new APP_PROFILE_CLASS { ProfileID = _profileId, ModuleID = moduleId };
+                    var profileClass = new AppProfileClass { ProfileID = _profileId, ModuleID = moduleId };
                     _db.InsertProfileClass(profileClass);
                 }
                 AddNodeFilho(nodeitem);
@@ -353,9 +365,10 @@ namespace BASE_APP
 
         private void InsertProfile()
         {
+            if(!ValidaProfile()) return;
             try
             {
-                var profile = new APP_PROFILES
+                var profile = new AppProfiles
                 {
                     ProfileDescription = txtProfile.Text,
                     CreationDate = DateTime.Now
@@ -367,10 +380,25 @@ namespace BASE_APP
             {
                 MessageBox.Show(Resources.ERROR_INSERT_PROFILE + ex.Message, Text, MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+                cmdSalvar.Enabled = true;
                 return;
             }
+            _frmUtil.SetMessageError(ref tssStatus, true, "Perfil inserido com sucesso!", AppFormUtil.StatusForm.Success);
             GetAllProfiles();
             ControlesPerfil(TypeTransaction.Clear);
+        }
+
+        private bool ValidaProfile()
+        {
+            if (txtProfile.Text == string.Empty)
+            {
+                errorProvider.SetError(txtProfile, Resources.VALIDADE_PROFILE);
+                _frmUtil.SetMessageError(ref tssStatus, true, Resources.VALIDADE_PROFILE, AppFormUtil.StatusForm.Error);
+                cmdSalvar.Enabled = true;
+                return false;
+            }
+            errorProvider.Clear();
+            return true;
         }
 
         private void grdProfiles_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -394,6 +422,7 @@ namespace BASE_APP
                     txtUserDescription.Text = grdUsers.Rows[e.RowIndex].Cells["UserDescription"].Value.ToString();
                     _userId = Convert.ToInt32(grdUsers.Rows[e.RowIndex].Cells["UserID"].Value);
                     cboProfile.SelectedValue = grdUsers.Rows[e.RowIndex].Cells["ProfileID2"].Value;
+                    cmdSalvar.Enabled = true;
                 }
                 if (e.ColumnIndex == 1)
                 {
@@ -452,30 +481,52 @@ namespace BASE_APP
                 switch (txt.Name)
                 {
                     case "txtProfile":
-                        tssStatus.Text = _profileId == 0 ? @"Informe o nome do perfil" : @"Atualize o nome do perfil";
+                        _frmUtil.SetMessageError(ref tssStatus, true, _profileId == 0 ? @"Informe o nome do perfil" : @"Atualize o nome do perfil", AppFormUtil.StatusForm.Info);
                         break;
                     case "txtUserName":
-                        tssStatus.Text = _userId == 0 ? @"Informe o nome do usuário" : @"Atualize o nome do usuário";
+                        _frmUtil.SetMessageError(ref tssStatus, true, _userId == 0 ? @"Informe o nome do usuário" : @"Atualize o nome do usuário", AppFormUtil.StatusForm.Info);
                         break;
                     case "txtUserDescription":
-                        tssStatus.Text = _userId == 0 ? @"Informe o nome completo do usuário" : @"Atualize o nome completo do usuário";
+                        _frmUtil.SetMessageError(ref tssStatus, true, _userId == 0 ? @"Informe o nome completo do usuário" : @"Atualize o nome completo do usuário", AppFormUtil.StatusForm.Info);
                         break;
-
                 }
             }
             else if (sender.GetType().Name.Contains("ComboBox"))
             {
-                tssStatus.Text = @"Selecione o Perfil para o usuário";
+                _frmUtil.SetMessageError(ref tssStatus, true, @"Selecione o Perfil para o usuário", AppFormUtil.StatusForm.Info);
             }
             else
             {
-                tssStatus.Text = "";
+                _frmUtil.SetMessageError(ref tssStatus, false, null, AppFormUtil.StatusForm.Info);
             }
         }
 
         private void Control_LostFocus(Object sender, EventArgs e)
         {
-            tssStatus.Text = "";
+            _frmUtil.SetMessageError(ref tssStatus, false, null, null);
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            errorProvider.Clear();
+            cmdSalvar.Enabled = false;
+            _frmUtil.SetMessageError(ref tssStatus, false, null, null);
+        }
+
+        private void grdUsers_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex > -1 && e.ColumnIndex <= 2)
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
+        private void grdUsers_CellMouseMove(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex > -1 && e.ColumnIndex <= 2)
+            {
+                Cursor = Cursors.Hand;
+            }
         }
     }
 }

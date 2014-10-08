@@ -9,7 +9,7 @@
 
 <div>
     <hr />
-    <dl class="well dl-horizontal">
+    <dl class="well dl-horizontal fadeIndSlow">
         <dt>
             @Html.DisplayNameFor(model => model.ModuleName)
         </dt>
@@ -72,3 +72,9 @@
         <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Voltar para Lista
     </a>
 </p>
+
+<script>
+    $(document).ready(function () {
+        $('.fadeIndSlow').fadeIn('slow');
+    });
+</script>  

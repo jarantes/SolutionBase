@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BASE_APP.Context;
+using BASE_APP.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
@@ -9,8 +11,24 @@ namespace BASE_APP
 {
     public class AppDatabaseUtil
     {
-        readonly ApplicationDBEntities _db = new ApplicationDBEntities();
-        readonly AppFunctionsUtil _fn = new AppFunctionsUtil();
+        readonly AppContext _db;
+        readonly AppFunctionsUtil _fn;
+
+        public AppDatabaseUtil()
+        {
+            _db = new AppContext();
+            _fn = new AppFunctionsUtil();
+            InitializePropertys();
+        }
+
+        private void InitializePropertys()
+        {
+            User = new AppUsers();
+            if (!_db.AppUsers.Any())
+            {
+                _db.Database.ExecuteSqlCommand("dbo.InitializeDatabase");
+            }
+        }
 
         public struct Menu
         {
@@ -18,6 +36,16 @@ namespace BASE_APP
             public string ModuleDescription;
             public string Checked;
             public int ImageIndex;
+        }
+
+        //Propridades
+        public AppUsers User { get; set; }
+
+        //Limpar as Propriedades
+        public void ClearPropertys()
+        {
+            User = null;
+            InitializePropertys();
         }
 
         //Commit das transações
@@ -37,96 +65,106 @@ namespace BASE_APP
             }
         }
 
-        public List<APP_USERS> GetAllUsers()
+        public List<AppUsers> GetAllUsers()
         {
-            return _db.APP_USERS.ToList();
+            return _db.AppUsers.ToList();
         }
 
-        public APP_USERS GetUserByName(string userName)
+        public AppUsers GetUserByName(string userName)
         {
-            var user = _db.APP_USERS.FirstOrDefault(a => a.UserName == userName);
+            var user = _db.AppUsers.FirstOrDefault(a => a.UserName == userName);
             return user;
         }
 
-        public APP_USERS GetUserById(int userId)
+        public AppUsers GetUserById(int userId)
         {
-            var user = _db.APP_USERS.FirstOrDefault(a => a.UserID == userId);
+            var user = _db.AppUsers.FirstOrDefault(a => a.UserID == userId);
             return user;
         }
 
-        public void InsertUser(APP_USERS user)
+        public void InsertUser(AppUsers user)
         {
             var passwordCrypted = _fn.GetMd5Hash(user.Password);
             user.Password = passwordCrypted;
-            _db.APP_USERS.Add(user);
+            _db.AppUsers.Add(user);
             Commit();
         }
 
         public void DeleteUser(int userId)
         {
-            var userDeleted = _db.APP_USERS.First(a => a.UserID == userId);
-            _db.APP_USERS.Remove(userDeleted);
+            var userDeleted = _db.AppUsers.First(a => a.UserID == userId);
+            _db.AppUsers.Remove(userDeleted);
             Commit();
         }
 
-        public void UpdateUser(APP_USERS user)
+        public void UpdateUser(AppUsers user)
         {
             var passwordCrypted = _fn.GetMd5Hash(user.Password);
             user.Password = passwordCrypted;
-            _db.APP_USERS.AddOrUpdate(user);
+            _db.AppUsers.AddOrUpdate(user);
             Commit();
         }
 
-        public bool Signon(string userName, string password)
+        public bool Signon()
         {
-            var user = GetUserByName(userName);
-            var passwordCrypted = _fn.GetMd5Hash(password);
+            var user = GetUserByName(User.UserName);
+            var passwordCrypted = _fn.GetMd5Hash(User.Password);
             return ((user != null) && (user.Password == passwordCrypted));
         }
 
-        public List<APP_PROFILES> GetAllProfiles()
+        public List<AppProfiles> GetAllProfiles()
         {
-            return _db.APP_PROFILES.ToList();
+            return _db.AppProfiles.ToList();
         }
 
-        public APP_PROFILES GetProfileById(int profileId)
+        public AppProfiles GetProfileById(int profileId)
         {
-            return _db.APP_PROFILES.FirstOrDefault(a => a.ProfileID == profileId);;
+            return _db.AppProfiles.FirstOrDefault(a => a.ProfileID == profileId); ;
         }
 
-        public void InsertProfile(APP_PROFILES profile)
+        public void InsertProfile(AppProfiles profile)
         {
-            _db.APP_PROFILES.Add(profile);
+            _db.AppProfiles.Add(profile);
             Commit();
         }
 
         public void DeleteProfile(int profileId)
         {
-            var profileDeleted = _db.APP_PROFILES.FirstOrDefault(a => a.ProfileID == profileId);
-            _db.APP_PROFILES.Remove(profileDeleted);
+            var profileDeleted = _db.AppProfiles.FirstOrDefault(a => a.ProfileID == profileId);
+            _db.AppProfiles.Remove(profileDeleted);
             Commit();
         }
 
-        public void UpdateProfile(APP_PROFILES profile)
+        public void UpdateProfile(AppProfiles profile)
         {
-            _db.APP_PROFILES.AddOrUpdate(profile);
+            _db.AppProfiles.AddOrUpdate(profile);
             Commit();
         }
 
         public List<Menu> GetModuleClassPai(int profileId)
         {
-            var query = from am in _db.APP_MODULES
-                        join apc in _db.APP_PROFILE_CLASS on am.ModuleID equals apc.ModuleID into a
-                        from amapc in a.DefaultIfEmpty()
-                        join apc in _db.APP_PROFILE_CLASS on profileId equals apc.ProfileID into c
-                        from apcp in c.DefaultIfEmpty()
-                        where am.ParentModuleID == null &&
-                              am.Activated == "Y"
-                              && (apcp.ClassID == amapc.ClassID || apcp == null || amapc == null)
-                        orderby am.Ordem
-                        select new { am.ModuleID, am.ModuleDescription, am.ImageIndex, Checked = (apcp.ClassID == null ? "N" : "Y") };
-
-            var lista = new List<Menu>();
+            var query = from am in _db.AppModules
+                        join apc in _db.AppProfileClass
+                              on new { ProfileID = profileId, am.ModuleID }
+                          equals new { apc.ProfileID, apc.ModuleID } into apc_join
+                        from apc in apc_join.DefaultIfEmpty()
+                        join ap in _db.AppProfiles on apc.ProfileID equals ap.ProfileID into ap_join
+                        from ap in ap_join.DefaultIfEmpty()
+                        where
+                          1 == 1 &&
+                          am.ParentModuleID == null &&
+                          am.Activated == "Y"
+                        orderby
+                          am.Ordem
+                        select new
+                        {
+                            ModuleID = am.ModuleID,
+                            am.ModuleDescription,
+                            am.ImageIndex,
+                            Checked =
+                            apc.ClassID == null ? "N" : "Y"
+                        };
+            var lstMenu = new List<Menu>();
 
             foreach (var i in query)
             {
@@ -137,26 +175,36 @@ namespace BASE_APP
                     Checked = i.Checked,
                     ImageIndex = i.ImageIndex
                 };
-                lista.Add(item);
+                lstMenu.Add(item);
             }
-            return lista;
+            return lstMenu;
         }
 
         public List<Menu> GetModuleClassFilho(int profileId, int moduleId, int parentModuleId)
         {
-            var query = from am in _db.APP_MODULES
-                        join apc in _db.APP_PROFILE_CLASS on am.ModuleID equals apc.ModuleID into a
-                        from amapc in a.DefaultIfEmpty()
-                        join apc in _db.APP_PROFILE_CLASS on profileId equals apc.ProfileID into c
-                        from apcp in c.DefaultIfEmpty()
-                        where (am.ParentModuleID == parentModuleId || parentModuleId == 0) &&
-                              am.Activated == "Y" &&
-                              (am.ModuleID == moduleId || moduleId == 0)
-                              && (apcp.ClassID == amapc.ClassID || apcp == null || amapc == null)
-                        orderby am.Ordem
-                        select new { am.ModuleID, am.ModuleDescription, Checked = (apcp.ClassID == null ? "N" : "Y") };
-
-            var lista = new List<Menu>();
+            var query = from am in _db.AppModules
+                        join apc in _db.AppProfileClass
+                              on new { ProfileID = profileId, am.ModuleID }
+                          equals new { apc.ProfileID, apc.ModuleID } into apc_join
+                        from apc in apc_join.DefaultIfEmpty()
+                        join ap in _db.AppProfiles on apc.ProfileID equals ap.ProfileID into ap_join
+                        from ap in ap_join.DefaultIfEmpty()
+                        where
+                          1 == 1 &&
+                          (am.ParentModuleID == parentModuleId || parentModuleId == 0) &&
+                          (am.ModuleID == moduleId || moduleId == 0) &&
+                          am.Activated == "Y"
+                        orderby
+                          am.Ordem
+                        select new
+                        {
+                            ModuleID = am.ModuleID,
+                            am.ModuleDescription,
+                            am.ImageIndex,
+                            Checked =
+                            apc.ClassID == null ? "N" : "Y"
+                        };
+            var lstMenu = new List<Menu>();
 
             foreach (var i in query)
             {
@@ -166,27 +214,27 @@ namespace BASE_APP
                     ModuleDescription = i.ModuleDescription,
                     Checked = i.Checked
                 };
-                lista.Add(item);
+                lstMenu.Add(item);
             }
-            return lista;
+            return lstMenu;
         }
 
         public void DeleteAllProfileClass(int profileId)
         {
-            var classes = _db.APP_PROFILE_CLASS.Where(a => a.ProfileID == profileId);
-            _db.APP_PROFILE_CLASS.RemoveRange(classes);
+            var classes = _db.AppProfileClass.Where(a => a.ProfileID == profileId);
+            _db.AppProfileClass.RemoveRange(classes);
             Commit();
         }
 
-        public void InsertProfileClass(APP_PROFILE_CLASS profileClass)
+        public void InsertProfileClass(AppProfileClass profileClass)
         {
-            _db.APP_PROFILE_CLASS.Add(profileClass);
+            _db.AppProfileClass.Add(profileClass);
             Commit();
         }
 
-        public APP_MODULES GetModuleById(int moduleId)
+        public AppModules GetModuleById(int moduleId)
         {
-            return _db.APP_MODULES.FirstOrDefault(a => a.ModuleID == moduleId);
+            return _db.AppModules.FirstOrDefault(a => a.ModuleID == moduleId);
         }
     }
 }

@@ -8,7 +8,7 @@
 <h2>@ViewBag.Title</h2>
 
 <hr />
-<div class="small">
+<div class="small fadeIndSlow">
 
     <form action="@Url.Action("Index","Product")" method="get"
           data-otf-ajax="true" data-otf-target="#listProducts" id="formSearch">
@@ -70,4 +70,10 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    $(document).ready(function () {
+        $('.fadeIndSlow').fadeIn('slow');
+    });
+</script>   
 }

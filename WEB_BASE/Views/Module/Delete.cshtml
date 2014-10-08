@@ -10,7 +10,7 @@
 <h3>Tem certeza de que deseja excluir este?</h3>
 <div>
     <hr />
-    <dl class="well dl-horizontal">
+    <dl class="well dl-horizontal fadeIndSlow">
         <dt>
             @Html.DisplayNameFor(model => model.ModuleName)
         </dt>
@@ -79,3 +79,9 @@
     </div>
    }
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('.fadeIndSlow').fadeIn('slow');
+    });
+</script>
